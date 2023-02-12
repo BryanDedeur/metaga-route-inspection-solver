@@ -84,13 +84,14 @@ class MetaGA:
         # create the pygad ga
         self.ga_instance = pygad.GA(
             num_generations=150,
+
             num_parents_mating=100, # num parents for mating
             fitness_func=self.fitness_function,
-            sol_per_pop=200, # population size including parents and children
+            sol_per_pop=100, # population size including parents and children
             parent_selection_type='rank',
-            K_tournament=100,
-            keep_parents=100, # double check this one
-            keep_elitism=1,
+            # K_tournament=50, # no effect unless using k_tournament
+            # keep_parents=100, # double check this one (no effect if keep_elitism = 0)
+            keep_elitism=50,
             crossover_type='two_points',
             crossover_probability=0.99,
             mutation_type='inversion',
