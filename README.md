@@ -1,6 +1,6 @@
 # MetaGA Route Inspection Solver
 
-The research source code for a Metaheuristic Genetic Algorithm (MetaGA) that solves route inspection problems. 
+The research source code for a Metaheuristic Genetic Algorithm (MetaGA) that solves route inspection problems min max k chinese postman problem (mmkcpp) and multi depot variants. 
  
 ## Getting Started
 
