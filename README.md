@@ -1,8 +1,18 @@
 # MetaGA Route Inspection Solver
 
-The research source code for a Metaheuristic Genetic Algorithm (MetaGA) that solves route inspection problems min max k chinese postman problem (mmkcpp) and multi depot variants. 
+The research source code for a Metaheuristic Genetic Algorithm (MetaGA) that solves route inspection arc routing problems min max k chinese postman problem (mmkcpp) and multi depot variants. 
 
 This repository uses [PyGAD](https://github.com/ahmedfgad/GeneticAlgorithmPython) for easy to adopt source code and genetic algorithm parameters for further experimentation.
+
+## Experiments
+
+### Runs / Random Seeds
+
+Here is a list of 30 random seeds used in my experiments.
+
+```
+8115,3520,8647,9420,3116,6377,6207,4187,3641,8591,3580,8524,2650,2811,9963,7537,3472,3714,8158,7284,6948,6119,5253,5134,7350,2652,9968,3914,6899,4715
+```
  
 ## Getting Started
 
