@@ -1,6 +1,8 @@
 # MetaGA Route Inspection Solver
 
 The research source code for a Metaheuristic Genetic Algorithm (MetaGA) that solves route inspection problems min max k chinese postman problem (mmkcpp) and multi depot variants. 
+
+This repository uses [PyGAD](https://github.com/ahmedfgad/GeneticAlgorithmPython) for easy to adopt source code for further experimentation.
  
 ## Getting Started
 
@@ -8,7 +10,7 @@ The research source code for a Metaheuristic Genetic Algorithm (MetaGA) that sol
 
 ### Windows & VSCode
 
-It is recommended to use Anaconda to create a isolated environment with the necessary packages versions that support PyGAD.
+It is recommended to use Anaconda to create a isolated environment with the necessary packages versions that support PyGAD since the various dependent libraries (numpy, scipy) .
 
 1. Install [Anaconda](https://www.anaconda.com/products/distribution)
 2. Run Anaconda
