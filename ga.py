@@ -82,7 +82,7 @@ class MetaGA:
             self.log_data['run best generation'] = self.best_generation
             self.log_data['run best obj'] = 1/self.best_fitness
             self.log_data['run best binary'] = ''.join(str(int(x)) for x in numpy.nditer(self.best_binary))
-            self.log_data['run best routes'] = self.best_solution 
+            self.log_data['run best route'] = self.best_solution 
             self.log_data['run best heuristics'] = self.best_heuristics
             self.log_data['run time(s)'] = self.run_time_seconds
             # ga_instance.plot_fitness()

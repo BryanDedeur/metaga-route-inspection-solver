@@ -52,6 +52,23 @@ class Router:
 			output['tour'+str(i)] = {'cost':self.tours[i].cost,'tour':self.tours[i].data_str()}
 		return output
 	
+	def get_route(self):
+		route = {
+			"sum costs":self.get_sum_costs(),
+			"tours": []
+		}
+
+		# append all the tours into the table
+		for i in range(len(self.tours)):
+			tour = {
+				'vertices': self.tours[i].get_vertex_sequence().copy(),
+				'edges': self.tours[i].get_edge_sequence().copy(),
+				'cost': self.tours[i].cost
+			}
+			route['tours'].append(tour)
+
+		return route
+	
 	def size(self):
 		return len(self.tours)
 
