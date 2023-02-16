@@ -12,6 +12,7 @@ class MetaGA:
         self.log_data_function = log_data_function
         
         def fitness_function(encoding, individual_id):
+            self.num_evaluations += 1
             fitness = eval_function(self, encoding, individual_id)
             return fitness
         
@@ -25,8 +26,10 @@ class MetaGA:
         self.log_data = {}
         self.gen_start_time = -1
         self.run_start_time = -1
+        self.num_evaluations = 0    
 
-        self.best_binary = numpy.array([])        
+        self.best_binary = numpy.array([])
+        self.best_evaluation = 0
         self.best_generation = 0
         self.best_fitness = 0
         self.best_solution = None
