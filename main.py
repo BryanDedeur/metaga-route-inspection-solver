@@ -73,7 +73,7 @@ def main():
             tour.add_vertex(tour.depot)
 
         # compute objective
-        objective = router.getLengthOfLongestTour()
+        objective = router.get_length_of_longest_tour()
         fitness = 1/objective
 
         # check if best
