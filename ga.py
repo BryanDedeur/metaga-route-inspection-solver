@@ -34,6 +34,7 @@ class MetaGA:
         self.best_fitness = 0
         self.best_solution = None
         self.best_heuristics = None
+        self.best_time_seconds = 0
 
     def create(self, seed : int):
         def on_start(ga_instance):
@@ -76,6 +77,8 @@ class MetaGA:
             self.run_time_seconds = time.time() - self.run_time_start
             print('] in ' + str(round(self.run_time_seconds, 3)) + 's')
             self.log_data = {}
+            self.log_data['run best evaluation'] = self.best_evaluation
+            self.log_data['run best time(s)'] = self.best_time_seconds
             self.log_data['run best generation'] = self.best_generation
             self.log_data['run best obj'] = 1/self.best_fitness
             self.log_data['run best binary'] = ''.join(str(int(x)) for x in numpy.nditer(self.best_binary))
@@ -139,9 +142,11 @@ class MetaGA:
         self.run_time_start = time.time()
         self.run_time_seconds = 0
 
-        self.best_binary = ''       
+        self.best_binary = ''
+        self.best_evaluation = 0
         self.best_generation = 0
         self.best_fitness = 0
+        self.best_time_seconds = 0
 
         self.ga_instance.run()
 
