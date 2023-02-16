@@ -45,12 +45,6 @@ class Router:
 			'depots' : self.depots,
 			'heuristic_group' : self.heuristics_group
 		}
-
-	def data(self):
-		output = {'sum costs':self.get_sum_costs()}
-		for i in range(len(self.tours)):
-			output['tour'+str(i)] = {'cost':self.tours[i].cost,'tour':self.tours[i].data_str()}
-		return output
 	
 	def get_route(self):
 		route = {
@@ -72,13 +66,13 @@ class Router:
 	def size(self):
 		return len(self.tours)
 
-	def setSeed(self, seed):
+	def set_seed(self, seed):
 		self.seed = seed
 		random.seed(seed)
 		for k in range(len(self.tours)):
 			self.tours[k].seed = seed
 
-	def View(self):
+	def view(self):
 		i = 0
 		# fig, ax = plt.subplots()
 		# sizex = 1
@@ -93,16 +87,16 @@ class Router:
 
 		fig, ax = plt.subplots(1, figsize=(4, 4))
 		ax.title.set_text('graph ' + self.graph.name.lower())
-		self.ViewOverlap(ax)
+		self.view_overlap(ax)
 		#plt.savefig(fname='img/' + self.graph.name +'-k'+str(len(self.tours))+'-'+str(self.seed) +'-overlap')
 		plt.close()
 
-	def colorFader(self, c1,c2,mix=0): #fade (linear interpolate) from color c1 (at mix=0) to c2 (mix=1)
+	def color_fader(self, c1,c2,mix=0): #fade (linear interpolate) from color c1 (at mix=0) to c2 (mix=1)
 		c1=np.array(mpl.colors.to_rgb(c1))
 		c2=np.array(mpl.colors.to_rgb(c2))
 		return mpl.colors.to_hex((1-mix)*c1 + mix*c2)
 
-	def ViewOverlap(self, ax):
+	def view_overlap(self, ax):
 		edgeVisits = []
 		for e in range(self.graph.size_e()):
 			edgeVisits.append(0)
@@ -121,7 +115,7 @@ class Router:
 			vpair = self.graph.get_edge_vertices(e)
 			x = (self.graph.vertices[vpair[0]][0], self.graph.vertices[vpair[1]][0])
 			y = (self.graph.vertices[vpair[0]][1], self.graph.vertices[vpair[1]][1])
-			ax.plot(x, y, color=self.colorFader(minColor,maxColor,(edgeVisits[e] - 1)/(maxCount - minCount)), linewidth=2 * edgeVisits[e])
+			ax.plot(x, y, color=self.color_fader(minColor,maxColor,(edgeVisits[e] - 1)/(maxCount - minCount)), linewidth=2 * edgeVisits[e])
 		legend_elements = [
 			Line2D([0], [0], color=minColor, linewidth=2 * minCount, label=str(minCount) + " visits"),
 			Line2D([0], [0], color=maxColor, linewidth=2 * maxCount, label=str(maxCount) + " visits")]
@@ -131,7 +125,7 @@ class Router:
 		data = [
 			len(self.tours), 
 			self.get_sum_costs(),
-			self.getLengthOfLongestTour()
+			self.get_length_of_longest_tour()
 			]
 		formatted = ''
 		for i in range(len(data)):
@@ -146,7 +140,7 @@ class Router:
 		# f = open(path, "a")
 		# f.write(self.to_string())
 		# f.close()
-		self.View()
+		self.view()
 
 	def copy(self, other):
 		self.graph = other.graph
@@ -179,10 +173,10 @@ class Router:
 		for i in range(self.graph.size_e()):
 			self.unvisitedEdges.append(i)
 
-	def getUnvisitedEdges(self):
+	def get_unvisited_edges(self):
 		return self.unvisitedEdges
 	
-	def getLongestTour(self):
+	def get_longest_tour(self):
 		foundTour = None
 		tempLength = 0
 		for tour in self.tours:
@@ -200,11 +194,11 @@ class Router:
 				tempLength = tour.cost
 		return foundTour
 
-	def getLengthOfLongestTour(self):
-		return self.getLongestTour().cost
+	def get_length_of_longest_tour(self):
+		return self.get_longest_tour().cost
 
 	def get_set_of_nearest_unvisited_edges(self, vertex, maxSetSize = -1, sort = True):
-		allShortestTourEdgePairs = self.getShortestToursToAllUnvisitedEdgesFromVertex(vertex)
+		allShortestTourEdgePairs = self.get_shortest_tours_to_all_unvisited_edges_from_vertex(vertex)
 		if len(allShortestTourEdgePairs) == 0:
 			return []
 		setOfEdges = []
@@ -309,17 +303,17 @@ class Router:
 
 	# --------------------------------------------------------------- END TOUR CONSTRUCTING HEURISTICS ---------------------------------------------------------------------------------
 
-	def addVertexToTours(self, vertexId):
+	def add_vertex_to_tours(self, vertexId):
 		for tour in self.tours:
 			tour.add_vertex(vertexId)
 
-	def addVertexToTour(self, vertexId, tour):
+	def add_vertex_to_tour(self, vertexId, tour):
 		tour.add_vertex(vertexId)
 
 	def extend_tour_to_edge(self, edgeId, tour):
 		if edgeId > -1:
 			numEdgesInTourBeforeAddedEdges = len(tour.edgeSequence)
-			tour.AddEdge(edgeId)
+			tour.add_edge(edgeId)
 			
 			# mark all edges along shortest path as visted
 			for e in range(numEdgesInTourBeforeAddedEdges, len(tour.edgeSequence)):
@@ -328,34 +322,24 @@ class Router:
 					self.unvisitedEdges.remove(edge)
 					self.visitedEdges.append(edge)
 
-	def getShortestToursToAllUnvisitedEdgesFromVertex(self, vertex, sortTours = True):
-		tempToursToEdges = []
-		for e in self.getUnvisitedEdges():
-			tempToursToEdges.append((self.graph.get_shortest_tour_between_vertex_and_edge(vertex, e), e))
+	def get_shortest_tours_to_all_unvisited_edges_from_vertex(self, vertex, sortTours = True):
+		temp_tours_to_edges = []
+		for e in self.get_unvisited_edges():
+			temp_tours_to_edges.append((self.graph.get_shortest_tour_between_vertex_and_edge(vertex, e), e))
 		def getTourLengthFromPair(tourEdgePair):
 			return tourEdgePair[0].cost
 		if sortTours:
-			tempToursToEdges.sort(key=getTourLengthFromPair)
-		return tempToursToEdges
+			temp_tours_to_edges.sort(key=getTourLengthFromPair)
+		return temp_tours_to_edges
 
-	def getShortestToursToEdgesFromVertex(self, edges, vertex, sortTours = True):
-		tempToursToEdges = []
+	def get_shortest_tours_to_edges_from_vertex(self, edges, vertex, sortTours = True):
+		temp_tours_to_edges = []
 		for e in edges:
-			tempToursToEdges.append((self.graph.get_shortest_tour_between_vertex_and_edge(vertex, e), e))
+			temp_tours_to_edges.append((self.graph.get_shortest_tour_between_vertex_and_edge(vertex, e), e))
 		def getTourLengthFromPair(tourEdgePair):
 			return tourEdgePair[0].cost
 		if sortTours:
-			tempToursToEdges.sort(key=getTourLengthFromPair)
-		return tempToursToEdges
-
-	def buildToursWithSimpleHeuristic(self):
-		# builds tours by always assigning nearest unvisited edges to the shortest tour
-		self.addVertexToTours(0)
-
-		while (len(self.getUnvisitedEdges()) > 0):
-			toursToEdges = self.getShortestToursToAllUnvisitedEdgesFromVertex(self.get_shortest_tour().vertexSequence[-1])
-			self.extend_tour_to_edge(toursToEdges[0][1], self.get_shortest_tour())
-
-		self.addVertexToTours(0)
+			temp_tours_to_edges.sort(key=getTourLengthFromPair)
+		return temp_tours_to_edges
 
 

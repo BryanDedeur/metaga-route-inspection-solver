@@ -59,7 +59,7 @@ class Tour:
     #     ax.scatter(self.graph.vertices[self.vertexSequence[0]][0], self.graph.vertices[self.vertexSequence[len(self.vertexSequence) -1 ]][1], marker = "*", color='red', zorder=9999)
     #     return
 
-    def View(self, id, color):
+    def view(self, id, color):
         fig, ax = plt.subplots(1, figsize=(4, 4))
         ax.title.set_text(self.graph.name + ' tour ' + str(id))
         self.graph.plot(ax, False, False)
@@ -71,7 +71,7 @@ class Tour:
         plt.close()
         return ax
 
-    def GraphExists(self):
+    def graph_exists(self):
         if self.graph == None:
             print("Trying to access a graph that has not been specified.")
             return False
@@ -113,7 +113,7 @@ class Tour:
         f.close()
     
     # Force insert the vertex. This will not resolve issues in the tour (ie intermediate edges)
-    def InsertVertex(self, vertexId):
+    def insert_vertex(self, vertexId):
         if (len(self.vertexSequence) == 0 and len(self.edgeSequence) == 0):
             self.vertexSequence.append(vertexId)
         elif (len(self.vertexSequence) > 0 and len(self.edgeSequence) == 0 and vertexId != self.vertexSequence[len(self.vertexSequence) - 1]):
@@ -125,26 +125,19 @@ class Tour:
             self.vertexSequence.append(vertexId)
             self.cost += self.graph.get_edge_cost(self.edgeSequence[len(self.edgeSequence) - 1])
 
-    def InjectShortestPathToVertex(self, vertex, shortestPath):
+    def inject_shortest_path_to_vertex(self, vertex, shortestPath):
         for i in range(len(shortestPath.vertexSequence)):
             self.add_vertex(shortestPath.vertexSequence[i])
 
-    def HandleFirstVertexNoEdges(self, vertex):
+    def handle_first_vertex_no_edges(self, vertex):
         self.vertexSequence.append(vertex)
         return
 
-    def HandleFirstVertexOneEdge(self, vertex):
+    def handle_first_vertex_one_edge(self, vertex):
         self.vertexSequence.append(vertex)
         self.vertexSequence.append(self.graph.get_opposite_vertex_on_edge(vertex, self.edgeSequence[len(self.edgeSequence) - 1]))
 
-    def HandleSecondVertexNoEdges(self, vertex):
-        if (vertex != self.vertexSequence[len(self.vertexSequence) - 1]):
-            self.edgeSequence.append(self.graph.get_edge(self.vertexSequence[len(self.vertexSequence) - 1], vertex))
-            self.cost += self.graph.get_edge_cost(self.edgeSequence[len(self.edgeSequence) - 1])
-            self.vertexSequence.append(vertex)
-        return
-
-    def HandleAllOtherVertexCases(self, vertex):
+    def handle_all_other_vertex_cases(self, vertex):
         if (vertex != self.vertexSequence[len(self.vertexSequence) - 1]):
             if (self.graph.is_valid_edge(self.vertexSequence[len(self.vertexSequence) - 1], vertex)):
                 edge = self.graph.get_edge(self.vertexSequence[len(self.vertexSequence) - 1], vertex)
@@ -152,41 +145,41 @@ class Tour:
                 self.vertexSequence.append(vertex)
                 self.cost += self.graph.get_edge_cost(edge)
             else:
-                self.InjectShortestPathToVertex(vertex, self.graph.get_shortest_tour_between_vertices(self.vertexSequence[len(self.vertexSequence) - 1], vertex))
+                self.inject_shortest_path_to_vertex(vertex, self.graph.get_shortest_tour_between_vertices(self.vertexSequence[len(self.vertexSequence) - 1], vertex))
 
     # Adds a vertex and resolves missing edges inbetween vertices
     def add_vertex(self, vertex):
         if (len(self.vertexSequence) == 0 and len(self.edgeSequence) == 0):
-            self.HandleFirstVertexNoEdges(vertex)
+            self.handle_first_vertex_no_edges(vertex)
         elif (len(self.vertexSequence) == 0 and len(self.edgeSequence) == 1):
-            self.HandleFirstVertexOneEdge(vertex)
+            self.handle_first_vertex_one_edge(vertex)
         elif (len(self.vertexSequence) == 1 and len(self.edgeSequence) == 0):
-            self.HandleAllOtherVertexCases(vertex)
+            self.handle_all_other_vertex_cases(vertex)
         elif (len(self.vertexSequence) > 0 and len(self.edgeSequence) > 0):
-            self.HandleAllOtherVertexCases(vertex)
+            self.handle_all_other_vertex_cases(vertex)
 
-    def InjectShortestTourToEdge(self, edge, shortestPath):
+    def inject_shortest_tour_to_edge(self, edge, shortestPath):
         for i in range(len(shortestPath.edgeSequence)):
-            self.AddEdge(shortestPath.edgeSequence[i])
-        self.AddEdge(edge)
+            self.add_edge(shortestPath.edgeSequence[i])
+        self.add_edge(edge)
 
-    def HandleFirstEdgeNoStartingVertex(self, edge):
+    def handle_first_edge_no_starting_vertex(self, edge):
         self.edgeSequence.append(edge)
         self.cost += self.graph.get_edge_cost(edge)
 
-    def HandleFirstEdgeWithStartingVertex(self, edge):
+    def handle_first_edge_with_starting_vertex(self, edge):
         vertices = self.graph.get_edge_vertices(edge)
         if (not (vertices[0] == self.vertexSequence[len(self.vertexSequence) - 1] or vertices[1] == self.vertexSequence[len(self.vertexSequence) - 1])):
-            self.InjectShortestTourToEdge(edge, self.graph.get_shortest_tour_between_vertex_and_edge(self.vertexSequence[len(self.vertexSequence) - 1], edge))
+            self.inject_shortest_tour_to_edge(edge, self.graph.get_shortest_tour_between_vertex_and_edge(self.vertexSequence[len(self.vertexSequence) - 1], edge))
         else:
             self.edgeSequence.append(edge)
             self.vertexSequence.append(self.graph.get_opposite_vertex_on_edge(self.vertexSequence[len(self.vertexSequence) - 1], edge))
             self.cost += self.graph.get_edge_cost(edge)
 
-    def HandleSecondEdgeNoStartingVertex(self, edge):
+    def handle_second_edge_no_starting_vertex(self, edge):
         connectingVertex = self.graph.get_edges_connection_vertex(edge, self.edgeSequence[len(self.edgeSequence) - 1])
         if connectingVertex == -1:
-            self.InjectShortestTourToEdge(edge, self.graph.get_shortest_tour_between_edges(self.edgeSequence[len(self.edgeSequence) - 1], edge))
+            self.inject_shortest_tour_to_edge(edge, self.graph.get_shortest_tour_between_edges(self.edgeSequence[len(self.edgeSequence) - 1], edge))
         else:
             startVertex = self.graph.get_opposite_vertex_on_edge(connectingVertex, self.edgeSequence[len(self.edgeSequence) - 1])
             self.vertexSequence.append(startVertex)
@@ -195,10 +188,10 @@ class Tour:
             self.vertexSequence.append(self.graph.get_opposite_vertex_on_edge(connectingVertex, self.edgeSequence[len(self.edgeSequence) - 1]))
             self.cost += self.graph.get_edge_cost(edge)
 
-    def HandleAllOtherEdgeCases(self, edge):
+    def handle_all_other_edge_cases(self, edge):
         connectingVertex = self.graph.get_edges_connection_vertex(edge, self.edgeSequence[len(self.edgeSequence) - 1])
         if (connectingVertex == -1):
-            self.InjectShortestTourToEdge(edge, self.graph.get_shortest_tour_between_edges(self.edgeSequence[len(self.edgeSequence) - 1], edge))
+            self.inject_shortest_tour_to_edge(edge, self.graph.get_shortest_tour_between_edges(self.edgeSequence[len(self.edgeSequence) - 1], edge))
         else:
             if (edge != self.edgeSequence[len(self.edgeSequence) - 1]):
                 sharedVertex = self.graph.get_edges_connection_vertex(self.edgeSequence[len(self.edgeSequence) - 1], edge)
@@ -218,13 +211,13 @@ class Tour:
             self.cost += self.graph.get_edge_cost(edge)
 
     # Adds a edge and resolves the path
-    def AddEdge(self, edge):
+    def add_edge(self, edge):
         if (len(self.vertexSequence) == 0 and len(self.edgeSequence) == 0):
-            self.HandleFirstEdgeNoStartingVertex(edge)
+            self.handle_first_edge_no_starting_vertex(edge)
         elif (len(self.vertexSequence) == 1 and len(self.edgeSequence) == 0):
-            self.HandleFirstEdgeWithStartingVertex(edge)
+            self.handle_first_edge_with_starting_vertex(edge)
         elif (len(self.vertexSequence) == 0 and len(self.edgeSequence) == 1):
-            self.HandleSecondEdgeNoStartingVertex(edge)
+            self.handle_second_edge_no_starting_vertex(edge)
         else:
-            self.HandleAllOtherEdgeCases(edge)
+            self.handle_all_other_edge_cases(edge)
 

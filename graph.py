@@ -41,9 +41,9 @@ class Graph:
             directory = filepath.replace(self.filename, '')
             objpath = directory + self.name + '.obj'
             if (os.path.exists(objpath)):
-                self.loadVertices(objpath)
+                self.load_vertices(objpath)
             else:
-                self.createVertexPositions()
+                self.create_vertex_positions()
         
         self.solve_and_cache_shortest_paths()
 
@@ -56,7 +56,7 @@ class Graph:
             'max_vertex_degree' : self.maxVertexDegree,
         }
 
-    def createVertexPositions(self):
+    def create_vertex_positions(self):
         theta_distribution = np.linspace(0, 2 * np.pi, self.size_v() + 1)
         radius = 1
         a = radius * np.cos(theta_distribution)
@@ -65,7 +65,7 @@ class Graph:
             self.vertices.append((a[v], b[v]))
         return
 
-    def loadVertices(self, path):
+    def load_vertices(self, path):
         file = open(path, 'r')
         lines = file.readlines()
         file.close()
@@ -351,8 +351,8 @@ class Graph:
                     self.cachedDijkstras[src][v].clear()
                     # Make new tour by deep copying the best vertex sequence
                     for i in range(len(self.cachedDijkstras[src][u].vertexSequence)):
-                        self.cachedDijkstras[src][v].InsertVertex(self.cachedDijkstras[src][u].vertexSequence[i])
-                    self.cachedDijkstras[src][v].InsertVertex(v)
+                        self.cachedDijkstras[src][v].insert_vertex(self.cachedDijkstras[src][u].vertexSequence[i])
+                    self.cachedDijkstras[src][v].insert_vertex(v)
                 
     def solve_and_cache_shortest_paths(self):
         """Solves Dijkstras between all pairs of vertices and stores it in the graph obj"""
