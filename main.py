@@ -2,6 +2,7 @@ import argparse
 import sys
 import wandb
 import numpy
+import time
 
 from os import path
 from graph import Graph
@@ -79,8 +80,10 @@ def main():
         if ga.best_fitness < fitness:
             ga.best_fitness = fitness
             ga.best_binary = numpy.copy(chromosome)
+            ga.best_evaluation = ga.num_evaluations
             ga.best_generation = ga.ga_instance.generations_completed
-            ga.best_solution = router.data().copy()
+            ga.best_time_seconds = time.time() - ga.run_time_start
+            ga.best_solution = router.get_route()
             decoding = numpy.array(decoding)
             heuristic_data = {}
             for h in range(len(router.heuristics)):

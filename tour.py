@@ -85,6 +85,12 @@ class Tour:
                 string += ','
         string += '}'
         return string
+    
+    def get_edge_sequence(self):
+        return self.edgeSequence
+
+    def get_vertex_sequence(self):
+        return self.vertexSequence
 
     def to_string(self, delimiter = " ", ending = '\n'):
         out = "t(" + str(self.cost) + ") : v["
@@ -222,8 +228,3 @@ class Tour:
         else:
             self.HandleAllOtherEdgeCases(edge)
 
-    def GetEdgePath(self):
-        return self.edgeSequence
-
-    def GetVertexPath(self):
-        return self.vertexSequence
