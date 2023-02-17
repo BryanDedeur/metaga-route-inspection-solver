@@ -16,9 +16,14 @@ Here is a list of 30 random seeds used in my experiments.
  
 ## Getting Started
 
+### Running 
+Example
 
+```bash
+python main.py -i benchmarks/bmcv/C05.dat -k 0,0 -s 8115,3520,8647,9420,3116,6377 -j MMMR
+```
 
-### Windows & VSCode
+### Windows & VSCode Environment
 
 It is recommended to use Anaconda to create a isolated environment with the necessary packages versions that support PyGAD since the various dependent libraries (numpy, scipy) .
 
@@ -35,5 +40,7 @@ It is recommended to use Anaconda to create a isolated environment with the nece
     - Type `python interpreter`
     - Select the conda environment 
 7. [Optional] Edit environment variables to support wandb
+
+
 
     
