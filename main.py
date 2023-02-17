@@ -107,7 +107,7 @@ def main():
             'routing' : router.config
         }
 
-        wandb.init(project="metaga-param-tuning", name=gph.name +'_'+ str(seed), config=wandb.config)
+        wandb.init(project="metaga-data", name=gph.name +'_'+ str(seed), config=wandb.config)
         metaga.run()
         wandb.log(metaga.log_data)
         wandb.finish()
