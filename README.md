@@ -2,7 +2,7 @@
 
 The research source code for a Metaheuristic Genetic Algorithm (MetaGA) that solves route inspection arc routing problems min max k chinese postman problem (mmkcpp) and multi depot variants. 
 
-This repository uses [PyGAD](https://github.com/ahmedfgad/GeneticAlgorithmPython) for easy to adopt source code and genetic algorithm parameters for further experimentation.
+This repository uses [PyGAD](https://github.com/ahmedfgad/GeneticAlgorithmPython) for easy to adopt source code and genetic algorithm parameters for further experimentation and [Weights & Biases](https://wandb.ai/home) for experiment tracking and dataset versioning.
 
 ## Experiments
 
