@@ -4,6 +4,8 @@ import numpy
 import pandas
 
 from scipy.stats import mannwhitneyu
+from scipy.stats import ttest_rel
+from scipy.stats import ttest_ind
 
 import wandb
 
@@ -21,55 +23,82 @@ def parse_args():
         sys.exit("Cannot find instance: " + args.data_file)
     return args
 
+def group_data_by_columns(dataframe, *column_keywords):
+    ag_data = {} #[num tours][instance][heuristic]
+
+    # Loop through the rows of the dataframe
+    for index, row in dataframe.iterrows():
+        # Access data for each column by column name
+        key = ag_data
+        for keyword in column_keywords:
+            value = row[keyword]
+            if value not in key:
+                key[value] = {}
+            key = key[value]
+
+        if not ('run best obj' in key):
+            key['run best obj']=[]
+            key['run best gen']=[]
+
+        key['run best obj'].append(row['run best obj'])
+        key['run best gen'].append(row['run best generation'])
+
+    return ag_data
+
+def produce_statisctics_for_k_values(grouped_data):
+    results = {}
+    for num_tours in grouped_data:
+        data_1 = grouped_data[num_tours]['RR']['run best obj']
+        data_2 = grouped_data[num_tours]['MMMR']['run best obj']
+        results[num_tours] = {}
+        results[num_tours]['mannwhitneyu'] = mannwhitneyu(data_1, data_2)
+        results[num_tours]['paired_t-test'] = ttest_rel(data_1, data_2)
+        results[num_tours]['two_sample_t-test'] = ttest_ind(data_1, data_2)
+
+    for num_tours in results:
+        alpha = 0.05
+        for key, value in results[num_tours].items():
+            p_val = value[1]
+            if p_val < alpha:
+                print("For k = " + str(num_tours) + " the " + key + " test indicates a significant difference (p-value = " + str(p_val) + ")")
+            else:
+                print("For k = " + str(num_tours) + " the " + key + " test indicates no significant difference (p-value = " + str(p_val) + ")")
+    print()
+    return results
+
 def main():
     args = parse_args()
     df = pandas.read_csv(args.data_file)
 
-    ag_data = {} #[num tours][instance][heuristic]
-    # Loop through the rows of the dataframe
-    for index, row in df.iterrows():
-        # Access data for each column by column name
-        num_tours = row['routing.num_tours']
-        if not (num_tours in ag_data):
-            ag_data[num_tours] = {}
+    grouped_data = group_data_by_columns(df, 'routing.num_tours', 'routing.heuristic_group')
+    produce_statisctics_for_k_values(grouped_data)
 
-        instance = row['instance.name']
-        if not (instance in ag_data[num_tours]):
-            ag_data[num_tours][instance] = {}
-        
-        heuristic_group = row['routing.heuristic_group']
-        if not (heuristic_group in ag_data[num_tours][instance]):
-            ag_data[num_tours][instance][heuristic_group] = {}
+    # Compute the per instance statistics
+    grouped_data = group_data_by_columns(df, 'routing.num_tours', 'instance.name', 'routing.heuristic_group')
 
-        if not ('run best obj' in ag_data[num_tours][instance][heuristic_group]):
-            ag_data[num_tours][instance][heuristic_group]['run best obj']=[]
-            ag_data[num_tours][instance][heuristic_group]['run best gen']=[]
-
-        ag_data[num_tours][instance][heuristic_group]['run best obj'].append(row['run best obj'])
-        ag_data[num_tours][instance][heuristic_group]['run best gen'].append(row['run best generation'])
-    
     data_best_obj = []
-    for num_tours in ag_data:
-        for instance in ag_data[num_tours]:
-            for heuristic_group in ag_data[num_tours][instance]:
-                ag_data[num_tours][instance][heuristic_group]['run best obj'] = numpy.array(ag_data[num_tours][instance][heuristic_group]['run best obj'])
-                ag_data[num_tours][instance][heuristic_group]['run avg best obj'] = numpy.mean(ag_data[num_tours][instance][heuristic_group]['run best obj'])
-                ag_data[num_tours][instance][heuristic_group]['run best gen'] = numpy.array(ag_data[num_tours][instance][heuristic_group]['run best gen'])
-                ag_data[num_tours][instance][heuristic_group]['run avg best gen'] = numpy.mean(ag_data[num_tours][instance][heuristic_group]['run best gen'])
+    for num_tours in grouped_data:
+        for instance in grouped_data[num_tours]:
+            for heuristic_group in grouped_data[num_tours][instance]:
+                grouped_data[num_tours][instance][heuristic_group]['run best obj'] = numpy.array(grouped_data[num_tours][instance][heuristic_group]['run best obj'])
+                grouped_data[num_tours][instance][heuristic_group]['run avg best obj'] = numpy.mean(grouped_data[num_tours][instance][heuristic_group]['run best obj'])
+                grouped_data[num_tours][instance][heuristic_group]['run best gen'] = numpy.array(grouped_data[num_tours][instance][heuristic_group]['run best gen'])
+                grouped_data[num_tours][instance][heuristic_group]['run avg best gen'] = numpy.mean(grouped_data[num_tours][instance][heuristic_group]['run best gen'])
 
+            # add means and compute statistics
             temp_data = [num_tours, instance]
-            temp_data.append(round(ag_data[num_tours][instance]['RR']['run avg best obj'], 4))
-            temp_data.append(round(ag_data[num_tours][instance]['MMMR']['run avg best obj'], 4))
-            data_1 = ag_data[num_tours][instance]['RR']['run best obj']
-            data_2 = ag_data[num_tours][instance]['MMMR']['run best obj']
+            temp_data.append(round(grouped_data[num_tours][instance]['RR']['run avg best obj'], 4))
+            temp_data.append(round(grouped_data[num_tours][instance]['MMMR']['run avg best obj'], 4))
+            data_1 = grouped_data[num_tours][instance]['RR']['run best obj']
+            data_2 = grouped_data[num_tours][instance]['MMMR']['run best obj']
             stat, p_value = mannwhitneyu(data_1, data_2)
             temp_data.append(str(round(p_value, 3)))
             temp_data.append(str(p_value < 0.05))
 
-            temp_data.append(round(ag_data[num_tours][instance]['RR']['run avg best gen'], 4))
-            temp_data.append(round(ag_data[num_tours][instance]['MMMR']['run avg best gen'], 4))
-            data_1 = ag_data[num_tours][instance]['RR']['run best gen']
-            data_2 = ag_data[num_tours][instance]['MMMR']['run best gen']
+            temp_data.append(round(grouped_data[num_tours][instance]['RR']['run avg best gen'], 4))
+            temp_data.append(round(grouped_data[num_tours][instance]['MMMR']['run avg best gen'], 4))
+            data_1 = grouped_data[num_tours][instance]['RR']['run best gen']
+            data_2 = grouped_data[num_tours][instance]['MMMR']['run best gen']
             stat, p_value = mannwhitneyu(data_1, data_2)
             temp_data.append(str(round(p_value, 3)))
             temp_data.append(str(p_value < 0.05))
@@ -83,7 +112,7 @@ def main():
     # stat, p_value = mannwhitneyu(data_1, data_2)
 
 
-    wandb.init(project="pygad-tests", name='best-obj-summary')
+    wandb.init(project="metaga-summary", name='best-obj-summary')
     table = wandb.Table(data=data_best_obj, columns=columns)
     wandb.log({"avg best objectives": table})
 
