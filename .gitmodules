@@ -1,0 +1,3 @@
+[submodule "bridge-graph-instances"]
+	path = bridge-graph-instances
+	url = https://github.com/BryanDedeur/bridge-graph-instances

@@ -16,6 +16,11 @@ Here is a list of 30 random seeds used in my experiments.
  
 ## Getting Started
 
+Add bridge graph instances
+```
+git submodule add https://github.com/BryanDedeur/bridge-graph-instances
+```
+
 ### Running 
 Example
 
