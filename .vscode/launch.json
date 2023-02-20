@@ -4,22 +4,21 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
-        // {
-        //     "name": "MetaGA: Compile Data",
-        //     "type": "python",
-        //     "request": "launch",
-        //     "program": "data_summary.py",
-        //     "args": ["-f wandb_export_2023-02-03T13_48_37.775-08_00.csv"],
-        //     "console": "integratedTerminal"
-        // },
         {
-            "name": "MetaGA: Run Example1",
+            "name": "MetaGA: Compile Data",
             "type": "python",
             "request": "launch",
-            "program": "main.py",
-            "args": ["-i benchmarks/gdb/C05.dat", "-k 0,0", "-s 8115,3520,8647,9420,3116,6377", "-j MMMR"],
+            "program": "data_analysis/data_summary.py",
+            "args": ["-f data_analysis/wandb_export.csv"],
             "console": "integratedTerminal"
         },
+        // {
+        //     "name": "MetaGA: Run Example1",
+        //     "type": "python",
+        //     "request": "launch",
+        //     "program": "main.py",
+        //     "args": ["-i benchmarks/gdb/C05.dat", "-k 0,0", "-s 8115,3520,8647,9420,3116,6377", "-j MMMR"],
+        //     "console": "integratedTerminal"
+        // },
     ]
 }
