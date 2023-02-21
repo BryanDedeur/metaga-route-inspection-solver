@@ -1,5 +1,1709 @@
-Instance,Data,Heuristic Group,mannwhitneyu,paired_t-test,two_sample_t-test
+## Instances and Kvalues:
+ - k=2 we ran on 38 total unique instances (18 gdb, 5 ktruss, 5 warren, 5 pratt, 5 howe)
+ - k=4 we ran on 43 total unique instances (5 howe, 23 gdb, 5 ktruss, 5 warren, 5 pratt)
+ - k=8 we ran on 43 total unique instances (5 ktruss, 5 warren, 23 gdb, 5 pratt, 5 howe)
 ## Overall Summary
 Comparing heuristic group RR vs MMMR on all k-values, all instances and all runs:
-## Overall Summary
-Comparing heuristic group RR vs MMMR on all k-values, all instances and all runs:
+ - run best obj:
+     - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.993)
+     - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.998)
+     - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<1.0)
+     - avg: RR 119.18, MMMMR 119.18
+     - var: RR 9268.521, MMMMR 9293.634
+     - std: RR 96.273, MMMMR 96.403
+ - run best gen:
+     - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.008)
+     - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.001)
+     - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.007)
+     - avg: RR 53.248, MMMMR 50.267
+     - var: RR 2298.785, MMMMR 2263.578
+     - std: RR 47.946, MMMMR 47.577
+ - run best eval:
+     - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.925)
+     - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.311)
+     - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.92)
+     - avg: RR 112930.56, MMMMR 112777.517
+     - var: RR 4329053052.777, MMMMR 4337875191.021
+     - std: RR 65795.54, MMMMR 65862.548
+## Per k-value
+Comparing heuristic group RR vs MMMR on individual k-values, all instances and all runs:
+ - k=2
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.846)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.937)
+     - avg: RR 197.853, MMMMR 198.257
+     - var: RR 14928.356, MMMMR 14982.197
+     - std: RR 122.182, MMMMR 122.402
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.391)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.328)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.499)
+     - avg: RR 48.661, MMMMR 47.288
+     - var: RR 2355.258, MMMMR 2334.665
+     - std: RR 48.531, MMMMR 48.318
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.967)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.722)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.979)
+     - avg: RR 112700.105, MMMMR 112625.824
+     - var: RR 4330922896.498, MMMMR 4333747541.228
+     - std: RR 65809.748, MMMMR 65831.205
+ - k=4
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.809)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.03)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.959)
+     - avg: RR 102.127, MMMMR 102.25
+     - var: RR 3752.306, MMMMR 3721.245
+     - std: RR 61.256, MMMMR 61.002
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.132)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.181)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.253)
+     - avg: RR 61.491, MMMMR 59.405
+     - var: RR 2086.087, MMMMR 2196.04
+     - std: RR 45.674, MMMMR 46.862
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.96)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.571)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.966)
+     - avg: RR 113347.643, MMMMR 113238.416
+     - var: RR 4326077759.608, MMMMR 4339069900.082
+     - std: RR 65772.926, MMMMR 65871.617
+ - k=8
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.772)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.73)
+     - avg: RR 66.708, MMMMR 66.227
+     - var: RR 1269.155, MMMMR 1222.222
+     - std: RR 35.625, MMMMR 34.96
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.051)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.005)
+     - avg: RR 49.06, MMMMR 43.761
+     - var: RR 2357.502, MMMMR 2134.616
+     - std: RR 48.554, MMMMR 46.202
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.95)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.439)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.918)
+     - avg: RR 112717.135, MMMMR 112450.673
+     - var: RR 4330109483.186, MMMMR 4339988582.777
+     - std: RR 65803.567, MMMMR 65878.59
+## Per Instance Statistics
+Comparing heuristic group RR vs MMMR on individual instances, all k-values and all runs:
+ - Instance gdb2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.073)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.047)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.033)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.947)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.049)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.974)
+ - Instance gdb1:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.016)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.013)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.037)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.935)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.016)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.992)
+ - Instance ktruss5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.137)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.106)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.136)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.473)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.425)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.413)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.422)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.978)
+ - Instance ktruss4:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.701)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.323)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.366)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.211)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.273)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.266)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.274)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.968)
+ - Instance ktruss3:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.039)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.022)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.028)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.408)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.382)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.381)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.376)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.976)
+ - Instance ktruss2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.348)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.275)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.296)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.473)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.354)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.43)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.35)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.98)
+ - Instance ktruss1:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.705)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.701)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.7)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.657)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.574)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.63)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.566)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.988)
+ - Instance warren5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.277)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.154)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.178)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.399)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.406)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.383)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.994)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.412)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.977)
+ - Instance warren4:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.005)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.004)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.191)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.2)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.215)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.971)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.198)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.966)
+ - Instance warren3:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.011)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.003)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.011)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.42)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.469)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.483)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.959)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.46)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.981)
+ - Instance warren1:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.0)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.684)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.703)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.715)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.7)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.991)
+ - Instance warren2:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.001)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.007)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.007)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.947)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.89)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.932)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.994)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.891)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.998)
+ - Instance gdb10:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.03)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.144)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.13)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.959)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.979)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.991)
+ - Instance pratt5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.252)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.401)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.459)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.34)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.419)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.362)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.971)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.422)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.977)
+ - Instance howe5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.301)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.595)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.586)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.882)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.805)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.828)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.804)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.994)
+ - Instance pratt4:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.002)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.001)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.355)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.345)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.403)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.994)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.334)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.977)
+ - Instance howe4:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.318)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.175)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.29)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.308)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.234)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.334)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.994)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.236)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.973)
+ - Instance pratt3:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.0)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.734)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.722)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.712)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.994)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.721)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.99)
+ - Instance howe3:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.009)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.018)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.008)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.363)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.438)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.461)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.971)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.442)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.981)
+ - Instance pratt2:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.047)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.009)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.048)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.848)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.836)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.831)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.84)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.994)
+ - Instance howe2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.734)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.72)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.72)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.811)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.806)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.818)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.995)
+ - Instance pratt1:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.009)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.061)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.045)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.62)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.578)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.601)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.585)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.987)
+ - Instance howe1:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.993)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.453)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.5)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.337)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.269)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.309)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.275)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.974)
+ - Instance gdb22:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.264)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.581)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.604)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.506)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.998)
+ - Instance gdb23:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.072)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.09)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.073)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.935)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.005)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.998)
+ - Instance gdb20:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.112)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.119)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.109)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.134)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.999)
+ - Instance gdb21:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.161)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.161)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.155)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.264)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.048)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.063)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.994)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.052)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.974)
+ - Instance gdb18:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.243)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.119)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.099)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.971)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.117)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.999)
+ - Instance gdb19:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.004)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.003)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.002)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.971)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.762)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.999)
+ - Instance gdb16:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.002)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.003)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.003)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.923)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.993)
+ - Instance gdb17:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.918)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.001)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.999)
+ - Instance gdb14:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.022)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.043)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.039)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.959)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.003)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.998)
+ - Instance gdb15:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.011)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.03)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.026)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.976)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.02)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.999)
+ - Instance gdb12:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.204)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.255)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.203)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.673)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.976)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.974)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.968)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.999)
+ - Instance gdb13:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<nan)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.118)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.032)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.047)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.935)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.032)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.984)
+ - Instance gdb11:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.021)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.054)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.015)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.482)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.547)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.564)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.547)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.984)
+ - Instance gdb9:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.215)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.184)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.167)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.169)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.086)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.138)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.086)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.965)
+ - Instance gdb8:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.0)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.564)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.577)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.546)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.575)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.985)
+ - Instance howe5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.268)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.087)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.972)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.267)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.182)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.219)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.956)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.179)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.968)
+ - Instance gdb17:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<1.0)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.105)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.005)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.937)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.001)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.994)
+ - Instance gdb21:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.278)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.001)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.946)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.321)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.19)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.207)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.973)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.192)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.973)
+ - Instance gdb23:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.598)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.033)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.984)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.069)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.732)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.776)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.944)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.653)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.995)
+ - Instance gdb15:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<1.0)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.001)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.004)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.002)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.902)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.001)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.995)
+ - Instance gdb11:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.435)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.164)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.965)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.21)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.182)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.171)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.969)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.18)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.964)
+ - Instance gdb13:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.304)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.005)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.966)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.045)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.031)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.948)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.945)
+ - Instance gdb19:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<1.0)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.009)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.004)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.003)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.86)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.017)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.996)
+ - Instance ktruss5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.376)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.07)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.969)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.805)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.847)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.834)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.981)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.855)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.995)
+ - Instance ktruss4:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.512)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.711)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.993)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.91)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.883)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.885)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.99)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.882)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.996)
+ - Instance ktruss3:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.274)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.013)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.952)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.777)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.741)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.748)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.99)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.733)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.991)
+ - Instance ktruss2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.931)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.808)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.996)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.24)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.238)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.269)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.96)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.238)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.973)
+ - Instance ktruss1:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.773)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.147)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.97)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.524)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.462)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.498)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.977)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.455)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.983)
+ - Instance warren5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.304)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.174)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.979)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.589)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.414)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.409)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.994)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.417)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.978)
+ - Instance warren4:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.442)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.219)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.977)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.4)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.311)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.303)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.981)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.307)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.973)
+ - Instance warren3:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.709)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.296)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.983)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.923)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.935)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.938)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.998)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.925)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.998)
+ - Instance warren1:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.135)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.913)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.145)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.186)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.18)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.96)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.185)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.966)
+ - Instance warren2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.23)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.015)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.946)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.979)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.998)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.998)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.994)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.999)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<1.0)
+ - Instance gdb1:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.04)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.951)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.005)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.004)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.008)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.927)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.836)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.948)
+ - Instance pratt5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.99)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.606)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.991)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.158)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.179)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.141)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.969)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.178)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.962)
+ - Instance howe4:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.191)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.006)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.951)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.221)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.142)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.21)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.969)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.142)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.967)
+ - Instance pratt4:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.401)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.065)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.966)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.485)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.494)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.559)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.985)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.489)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.984)
+ - Instance howe3:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.142)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.004)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.939)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.104)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.096)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.092)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.952)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.095)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.956)
+ - Instance pratt3:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.053)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.92)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.557)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.587)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.592)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.973)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.588)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.985)
+ - Instance howe2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.592)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.214)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.971)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.548)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.468)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.468)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.99)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.468)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.983)
+ - Instance howe1:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.383)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.102)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.97)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.436)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.373)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.411)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.981)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.373)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.98)
+ - Instance pratt2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.289)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.017)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.954)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.698)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.699)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.702)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.99)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.694)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.989)
+ - Instance pratt1:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.005)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.819)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.312)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.271)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.28)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.973)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.275)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.973)
+ - Instance gdb22:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<1.0)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.022)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.01)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.013)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.939)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.009)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.98)
+ - Instance gdb20:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.57)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.132)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.96)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.718)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.974)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.98)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.994)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.973)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.999)
+ - Instance gdb18:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.085)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.918)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.936)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.859)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.897)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.977)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.875)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.997)
+ - Instance gdb16:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.145)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.92)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.793)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.015)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.036)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.994)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.016)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.954)
+ - Instance gdb14:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.931)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.659)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.994)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.774)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.501)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.602)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.981)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.54)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.99)
+ - Instance gdb12:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.036)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.799)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.038)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.312)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.288)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.935)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.312)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.976)
+ - Instance gdb10:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.715)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.241)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.982)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.258)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.555)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.654)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.985)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.964)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.989)
+ - Instance gdb9:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.84)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.695)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.993)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.771)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.657)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.698)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.985)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.66)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.99)
+ - Instance gdb8:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.014)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.796)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.304)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.36)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.362)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.96)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.575)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.975)
+ - Instance gdb6:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.0)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.054)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.068)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.059)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.068)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.95)
+ - Instance gdb4:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.0)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.506)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.436)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.429)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.435)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.981)
+ - Instance gdb7:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.0)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.0)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.912)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.904)
+ - Instance gdb5:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.045)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.021)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.015)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.535)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.809)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.798)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.803)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.994)
+ - Instance gdb2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.115)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.941)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.009)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.001)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.007)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.91)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.001)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.935)
+ - Instance gdb3:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.161)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.161)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.155)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.813)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.94)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.952)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.982)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.946)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.999)
+ - Instance ktruss5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.367)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.005)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.964)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.967)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.989)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.988)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.992)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.999)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<1.0)
+ - Instance ktruss4:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.372)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.124)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.98)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.835)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.828)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.836)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.981)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.827)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.994)
+ - Instance ktruss3:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.951)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.669)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.993)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.998)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.989)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.989)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.994)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.99)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<1.0)
+ - Instance ktruss2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.371)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.009)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.958)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.588)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.621)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.628)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.99)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.627)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.988)
+ - Instance ktruss1:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.429)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.036)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.966)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.233)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.198)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.211)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.969)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.193)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.968)
+ - Instance warren5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.075)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.903)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.622)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.346)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.348)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.992)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.35)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.975)
+ - Instance warren4:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.12)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.933)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.033)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.034)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.031)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.944)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.033)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.942)
+ - Instance warren3:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.404)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.042)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.969)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.445)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.466)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.48)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.981)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.455)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.981)
+ - Instance warren2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.935)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.421)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.986)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.434)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.415)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.424)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.987)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.416)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.979)
+ - Instance warren1:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.27)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.001)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.933)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.264)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.293)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.271)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.969)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.294)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.971)
+ - Instance gdb1:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.283)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.961)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.08)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.005)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.017)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.993)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.887)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.959)
+ - Instance pratt5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.261)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.947)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.607)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.571)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.535)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.99)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.57)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.984)
+ - Instance howe5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.427)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.047)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.977)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.44)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.359)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.397)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.958)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.352)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.978)
+ - Instance pratt4:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.77)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.951)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.999)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.95)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.937)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.944)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.997)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.932)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.998)
+ - Instance howe4:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.734)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.109)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.978)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.281)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.228)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.279)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.969)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.228)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.971)
+ - Instance pratt3:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.435)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.009)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.96)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.977)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.964)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.965)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.964)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.999)
+ - Instance howe3:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.344)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.951)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.096)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.117)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.093)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.953)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.116)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.957)
+ - Instance pratt2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.919)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.652)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.993)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.733)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.769)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.772)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.974)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.772)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.992)
+ - Instance howe2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.649)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.169)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.976)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.122)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.115)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.123)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.956)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.115)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.962)
+ - Instance pratt1:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.425)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.876)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.886)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.964)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.967)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.999)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.953)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.999)
+ - Instance howe1:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.983)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.654)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.992)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.337)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.297)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.333)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.974)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.293)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.976)
+ - Instance gdb23:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.285)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.958)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.523)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.501)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.535)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.976)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.474)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.989)
+ - Instance gdb22:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.858)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.208)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.992)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.003)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.048)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.041)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.927)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.046)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.976)
+ - Instance gdb20:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.434)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.934)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.818)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.122)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.195)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.981)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.122)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.972)
+ - Instance gdb21:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.545)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.961)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.018)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.03)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.033)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.94)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.03)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.954)
+ - Instance gdb18:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.306)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.935)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.363)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.295)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.378)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.969)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.288)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.98)
+ - Instance gdb19:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<1.0)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.012)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.005)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.004)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.792)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.994)
+ - Instance gdb17:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.789)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.109)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.975)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.063)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.286)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.37)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.945)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.273)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.982)
+ - Instance gdb16:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.45)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.001)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.946)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.714)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.041)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.054)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.99)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.042)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.958)
+ - Instance gdb15:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<1.0)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<nan)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<1.0)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.002)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.0)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.917)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.992)
+ - Instance gdb14:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.929)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.53)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.991)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.714)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.146)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.243)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.994)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.162)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.978)
+ - Instance gdb13:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.587)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.006)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.971)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.334)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.059)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.978)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.002)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.955)
+ - Instance gdb12:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.143)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.802)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.006)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.057)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.054)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.926)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.893)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.954)
+ - Instance gdb11:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.589)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.135)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.973)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.554)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.459)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.448)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.981)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.458)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.98)
+ - Instance gdb10:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.393)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.003)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.965)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.127)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.065)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.119)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.974)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.855)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.963)
+ - Instance gdb9:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.675)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.187)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.98)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.805)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.992)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.993)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.978)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.995)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<1.0)
+ - Instance gdb8:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.042)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.78)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.062)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.069)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.08)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.937)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.222)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.953)
+ - Instance gdb7:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.071)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.816)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.318)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.134)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.133)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.952)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.145)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.971)
+ - Instance gdb5:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.582)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.067)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.891)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.001)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.011)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.012)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.906)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.01)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.943)
+ - Instance gdb6:
+     - run best obj:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.043)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.239)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.464)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.068)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.234)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.975)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.068)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.965)
+ - Instance gdb3:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.859)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.159)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.968)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.182)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.463)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.69)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.96)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.363)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.994)
+ - Instance gdb4:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.059)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.383)
+     - run best gen:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.865)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.431)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.533)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.998)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.431)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.986)
+ - Instance gdb2:
+     - run best obj:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.675)
+         - [ ] paired_t-test test indicates no significant difference (p-value: 0.05<0.834)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.997)
+     - run best gen:
+         - [X] mannwhitneyu test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [X] two_sample_t-test test indicates a significant difference (p-value: 0.05<0.0)
+     - run best eval:
+         - [ ] mannwhitneyu test indicates no significant difference (p-value: 0.05<0.858)
+         - [X] paired_t-test test indicates a significant difference (p-value: 0.05<0.0)
+         - [ ] two_sample_t-test test indicates no significant difference (p-value: 0.05<0.889)

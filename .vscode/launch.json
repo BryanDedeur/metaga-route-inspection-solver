@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "data_analysis/data_summary.py",
-            "args": ["-f data_analysis/wandb_export.csv"],
+            "args": ["-f data_analysis/export.csv"],
             "console": "integratedTerminal"
         },
         // {
