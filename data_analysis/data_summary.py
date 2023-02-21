@@ -3,6 +3,8 @@ import sys
 import numpy
 import pandas
 import re
+import csv
+
 from collections import defaultdict
 
 from scipy.stats import mannwhitneyu
@@ -209,38 +211,29 @@ def write_per_kvalue_statistics(grouped_data, filename):
 
 
 def write_per_instance_statistics_to_file(grouped_data, filename):
-    with open(filename, 'a') as f:
-        results = defaultdict(dict)
-        f.write('## Per Instance Statistics\n')
-        f.write('Comparing heuristic group RR vs MMMR on individual instances, all k-values and all runs:\n')
+    with open(filename, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['Instance', 'Data', 'Heuristic Group', 'mannwhitneyu', 'paired_t-test', 'two_sample_t-test'])
         for num_tours, tour_data in grouped_data.items():
             for instance, instance_data in tour_data.items():
                 for heuristic_group, heuristic_data in instance_data.items():
-                    if not (heuristic_group in results[instance]):
-                        results[instance][heuristic_group] = {}
+                    results = defaultdict(list)
                     for seed, seed_data in heuristic_data.items():
                         for data, run_data in seed_data.items():
-                            if not (data in results[instance][heuristic_group]):
-                                results[instance][heuristic_group][data] = []
-                            results[instance][heuristic_group][data].append(run_data[0])
-
-                f.write(' - Instance ' + instance + ':\n')
-                temp_results = {}
-                for data, run_data in results[instance]['RR'].items():
-                    temp_results[data] = {}
-                    temp_results[data]['mannwhitneyu'] = mannwhitneyu(results[instance]['RR'][data], results[instance]['MMMR'][data])
-                    temp_results[data]['paired_t-test'] = ttest_rel(results[instance]['RR'][data], results[instance]['MMMR'][data])
-                    temp_results[data]['two_sample_t-test'] = ttest_ind(results[instance]['RR'][data], results[instance]['MMMR'][data])
-
-                alpha = 0.05
-                for data, run_data in temp_results.items():
-                    f.write("     - " + data + ':\n')
-                    for statistic, statistic_data in run_data.items():
-                        p_val = statistic_data[1]
-                        if p_val < alpha:
-                            f.write("         - [X] " + statistic + " test indicates a significant difference (p-value: "+ str(alpha) + '<' + str(round(p_val,3)) + ")\n")
-                        else:
-                            f.write("         - [ ] " + statistic + " test indicates no significant difference (p-value: "+ str(alpha) + '<' + str(round(p_val,3)) + ")\n")
+                            results[data].append(run_data[0])
+                    for data, run_data in results.items():
+                        temp_results = {}
+                        temp_results['mannwhitneyu'] = mannwhitneyu(results['RR'], results['MMMR'])
+                        temp_results['paired_t-test'] = ttest_rel(results['RR'], results['MMMR'])
+                        temp_results['two_sample_t-test'] = ttest_ind(results['RR'], results['MMMR'])
+                        alpha = 0.05
+                        for statistic, statistic_data in temp_results.items():
+                            p_val = statistic_data[1]
+                            if p_val < alpha:
+                                is_significant = '[X]'
+                            else:
+                                is_significant = '[ ]'
+                            writer.writerow([instance, data, heuristic_group, statistic_data[0], is_significant, p_val])
 
 
 def main():
@@ -262,52 +255,11 @@ def main():
     write_statistics_overall(grouped_data, filename)
     write_per_kvalue_statistics(grouped_data, filename)
     write_per_instance_statistics_to_file(grouped_data, filename)
-    # print_per_instance_statistics(grouped_data)
-
-    produce_statisctics_for_k_values(grouped_data)
-
-    # Compute the per instance statistics
-    grouped_data = group_data_by_columns(df, 'routing.num_tours', 'instance.name', 'routing.heuristic_group')
-
-    data_best_obj = []
-    for num_tours in grouped_data:
-        for instance in grouped_data[num_tours]:
-            for heuristic_group in grouped_data[num_tours][instance]:
-                grouped_data[num_tours][instance][heuristic_group]['run best obj'] = numpy.array(grouped_data[num_tours][instance][heuristic_group]['run best obj'])
-                grouped_data[num_tours][instance][heuristic_group]['run avg best obj'] = numpy.mean(grouped_data[num_tours][instance][heuristic_group]['run best obj'])
-                grouped_data[num_tours][instance][heuristic_group]['run best gen'] = numpy.array(grouped_data[num_tours][instance][heuristic_group]['run best gen'])
-                grouped_data[num_tours][instance][heuristic_group]['run avg best gen'] = numpy.mean(grouped_data[num_tours][instance][heuristic_group]['run best gen'])
-
-            # add means and compute statistics
-            temp_data = [num_tours, instance]
-            temp_data.append(round(grouped_data[num_tours][instance]['RR']['run avg best obj'], 4))
-            temp_data.append(round(grouped_data[num_tours][instance]['MMMR']['run avg best obj'], 4))
-            data_1 = grouped_data[num_tours][instance]['RR']['run best obj']
-            data_2 = grouped_data[num_tours][instance]['MMMR']['run best obj']
-            stat, p_value = mannwhitneyu(data_1, data_2)
-            temp_data.append(str(round(p_value, 3)))
-            temp_data.append(str(p_value < 0.05))
-
-            temp_data.append(round(grouped_data[num_tours][instance]['RR']['run avg best gen'], 4))
-            temp_data.append(round(grouped_data[num_tours][instance]['MMMR']['run avg best gen'], 4))
-            data_1 = grouped_data[num_tours][instance]['RR']['run best gen']
-            data_2 = grouped_data[num_tours][instance]['MMMR']['run best gen']
-            stat, p_value = mannwhitneyu(data_1, data_2)
-            temp_data.append(str(round(p_value, 3)))
-            temp_data.append(str(p_value < 0.05))
-            data_best_obj.append(temp_data)
-            
-    columns=["k", "instance", "RR ave best obj", "MMMR ave best obj", 'obj p-value', 'obj sig_diff', 'RR ave best gen', 'MMMR ave best gen', 'gen p-value', 'gen sig_diff']
-
-    # data_1 = numpy.array(data_best_obj)[:,2].astype(numpy.float32).tolist()
-    # data_2 = numpy.array(data_best_obj)[:,3].astype(numpy.float32).tolist()
-
-    # stat, p_value = mannwhitneyu(data_1, data_2)
 
 
-    wandb.init(project="metaga-summary", name='best-obj-summary')
-    table = wandb.Table(data=data_best_obj, columns=columns)
-    wandb.log({"avg best objectives": table})
+    # wandb.init(project="metaga-summary", name='best-obj-summary')
+    # table = wandb.Table(data=data_best_obj, columns=columns)
+    # wandb.log({"avg best objectives": table})
 
     pass
 
