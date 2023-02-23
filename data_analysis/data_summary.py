@@ -27,9 +27,6 @@ def parse_args():
         sys.exit("Cannot find instance: " + args.data_file)
     return args
 
-def remove_bad_state(df):
-    return df.drop(df[(df['State'] == 'killed') | (df['State'] == 'crashed')].index)
-
 def group_data_by_columns(dataframe, *column_keywords):
     ag_data = {} #[num tours][instance][heuristic]
 
@@ -307,8 +304,11 @@ def main():
     args = parse_args()
     df = pandas.read_csv(args.data_file)
 
+    # drop duplicates based on these columns
+    df = df.drop_duplicates(subset=['routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed'])
+
     # Remove state == killed or state == crashed
-    cleaned_df = remove_bad_state(df)
+    df = df[df['State'] == 'finished']
 
     # Group the data and track if known
     grouped_data = group_data_by_columns(cleaned_df, 'routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed')
