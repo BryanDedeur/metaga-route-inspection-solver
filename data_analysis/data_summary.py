@@ -51,23 +51,23 @@ def group_data_by_columns(dataframe, *column_keywords):
 
     return ag_data
 
-def exclude_unbalanced_instances(grouped_data):
+def exclude_unbalanced_runs(grouped_data):
     # Initialize variables
     to_remove = []
 
     # Loop through the groups and find the minimum number of 'ga.random_seed' values
     for num_tours, tour_data in grouped_data.items():
         for instance, instance_data in tour_data.items():
-            max_heuristics = 0
+            sum_heuristic_len = 0
             for heuristic_group, heuristic_data in instance_data.items():
-                max_heuristics = max(max_heuristics, len(heuristic_data))
-            for heuristic_group, heuristic_data in instance_data.items():
-                if len(heuristic_data) != max_heuristics:
+                sum_heuristic_len += len(heuristic_data)
+                if (len(heuristic_data) != 30):
                     to_remove.append((num_tours, instance, heuristic_group))
+                    break
 
     # Remove unbalanced instances from the grouped data
     for group in to_remove:
-        print("Excluding routing.num_tours=" + str(group[0]) + ', instance.name='+group[1] + ' due to unbalanced number of runs in group '+group[2])
+        print("Excluding routing.num_tours=" + str(group[0]) + ', instance.name='+group[1] + ' due to unbalanced number of runs on heuristic ' + group[2])
         del grouped_data[group[0]][group[1]]
 
     return grouped_data    
@@ -104,75 +104,40 @@ def remove_numeric_suffix(string):
         # If no match is found, return the original string
         return string
 
-def write_num_instances_per_group_to_file(data, file_path):
-    with open(file_path, 'a') as f:
-        num_instances_per_tour_group = {}
-        for num_tours, tour_data in data.items():
-            num_instances_per_tour_group[num_tours] = {}
-            num_instances_per_tour_group[num_tours]['total'] = 0
-            for instance, instance_data in tour_data.items():
-                instance_name = remove_numeric_suffix(instance)
-                if not (instance_name in num_instances_per_tour_group[num_tours]):
-                    num_instances_per_tour_group[num_tours][instance_name] = 1
-                else:
-                    num_instances_per_tour_group[num_tours][instance_name] += 1
-                num_instances_per_tour_group[num_tours]['total'] += 1
-
-        f.write("## Instances and Kvalues:\n")
-        # Number of instances per k value
-        for num_tours, num_instances in num_instances_per_tour_group.items():
-            f.write(" - k=" + str(num_tours) + " we ran on " + str(num_instances_per_tour_group[num_tours]['total'])+' total unique instances (')
-            out = ''
-            for instance_name, count in num_instances_per_tour_group[num_tours].items():
-                if not instance_name == 'total':
-                    out += str(count) + ' ' + instance_name + ', '
-            f.write(out[:-2] + ')\n')
-
-
 def write_statistics_overall(data, file_path):
-    all_data = {}
+    temp_data = {}
     for num_tours, tour_data in data.items():
         for instance, instance_data in tour_data.items():
             for heuristic_group, heuristic_data in instance_data.items():
-                if not (heuristic_group in all_data):
-                    all_data[heuristic_group] = {}
+                if not (heuristic_group in temp_data):
+                    temp_data[heuristic_group] = {}
                 for seed, seed_data in heuristic_data.items():
                     for data, run_data in seed_data.items():
-                        if not (data in all_data[heuristic_group]):
-                            all_data[heuristic_group][data] = []
-                        all_data[heuristic_group][data].append(run_data[0])
+                        if not (data in temp_data[heuristic_group]):
+                            temp_data[heuristic_group][data] = []
+                        temp_data[heuristic_group][data].append(run_data[0])
 
     with open(file_path, 'a') as file:
-        file.write('## Overall Summary\n')
-        file.write('Comparing heuristic group RR vs MMMR on all k-values, all instances and all runs:\n')
-        results = {}
-        for data, run_data in all_data['RR'].items():
-            results[data] = {}
-            results[data]['mannwhitneyu'] = mannwhitneyu(all_data['RR'][data], all_data['MMMR'][data])
-            results[data]['paired_t-test'] = ttest_rel(all_data['RR'][data], all_data['MMMR'][data])
-            results[data]['two_sample_t-test'] = ttest_ind(all_data['RR'][data], all_data['MMMR'][data])
-            results[data]['avg'] = [round(numpy.mean(all_data['RR'][data]), 3), round(numpy.mean(all_data['MMMR'][data]), 3)]
-            results[data]['var'] = [round(numpy.var(all_data['RR'][data]), 3), round(numpy.var(all_data['MMMR'][data]), 3)]
-            results[data]['std'] = [round(numpy.std(all_data['RR'][data]), 3), round(numpy.std(all_data['MMMR'][data]), 3)]
-
-        alpha = 0.05
-        for data, run_data in results.items():
-            file.write(" - " + data + ':\n')
-            for statistic, statistic_data in run_data.items():
-                if statistic == 'avg' or statistic == 'var' or statistic == 'std':
-                    file.write("     - " + statistic + ": RR " + str(statistic_data[0]) + ", MMMMR " + str(statistic_data[1]) + '\n')
-                else:
-                    p_val = statistic_data[1]
-                    if p_val < alpha:
-                        file.write("     - [X] " + statistic + " test indicates a significant difference (p-value: "+ str(alpha) + '<' + str(round(p_val,3)) + ")\n")
-                    else:
-                        file.write("     - [ ] " + statistic + " test indicates no significant difference (p-value: "+ str(alpha) + '<' + str(round(p_val,3)) + ")\n")
+        file.write('overall,avg rr,avg mmmr,avg perc impr,best rr,best mmmr, best perc impr, mann, paired t-test, two-sample t-test\n')
+        for data, run_data in temp_data['RR'].items():
+            if data != 'run best eval':
+                average_rr = numpy.mean(temp_data['RR'][data])
+                average_mmmr = numpy.mean(temp_data['MMMR'][data])
+                avg_percent_improvement = ((average_rr - average_mmmr) / average_mmmr)
+                best_rr = numpy.min(temp_data['RR'][data])
+                best_mmmr = numpy.min(temp_data['MMMR'][data])
+                best_percent_improvement = ((best_rr - best_mmmr) / best_mmmr)
+                mannwhitneyu_test = mannwhitneyu(temp_data['RR'][data], temp_data['MMMR'][data])
+                paired_t_test = ttest_rel(temp_data['RR'][data], temp_data['MMMR'][data])
+                two_sample_t_test = ttest_ind(temp_data['RR'][data], temp_data['MMMR'][data])
+                file.write(data+','+
+                        str(average_rr)+','+str(average_mmmr)+','+str(avg_percent_improvement)+','+
+                        str(best_rr)+','+str(best_mmmr)+','+str(best_percent_improvement)+','+
+                        str(mannwhitneyu_test[1])+','+str(paired_t_test[1])+','+str(two_sample_t_test[1])+'\n')
 
 def write_per_kvalue_statistics(grouped_data, filename):
     results = defaultdict(dict)
     with open(filename, 'a') as f:
-        f.write('## Per k-value\n')
-        f.write('Comparing heuristic group RR vs MMMR on individual k-values, all instances and all runs:\n')
         for num_tours, tour_data in grouped_data.items():
             for instance, instance_data in tour_data.items():
                 for heuristic_group, heuristic_data in instance_data.items():
@@ -184,29 +149,22 @@ def write_per_kvalue_statistics(grouped_data, filename):
                                 results[num_tours][heuristic_group][data] = []
                             results[num_tours][heuristic_group][data].append(run_data[0])
 
-            f.write(' - k=' + str(num_tours) + '\n')
-            temp_results = {}
+            f.write('k='+str(num_tours)+',avg rr,avg mmmr,avg perc impr,best rr,best mmmr, best perc impr, mann, paired t-test, two-sample t-test\n')
             for data, run_data in results[num_tours]['RR'].items():
-                temp_results[data] = {}
-                temp_results[data]['mannwhitneyu'] = mannwhitneyu(results[num_tours]['RR'][data], results[num_tours]['MMMR'][data])
-                temp_results[data]['paired_t-test'] = ttest_rel(results[num_tours]['RR'][data], results[num_tours]['MMMR'][data])
-                temp_results[data]['two_sample_t-test'] = ttest_ind(results[num_tours]['RR'][data], results[num_tours]['MMMR'][data])
-                temp_results[data]['avg'] = [round(numpy.mean(results[num_tours]['RR'][data]), 3), round(numpy.mean(results[num_tours]['MMMR'][data]), 3)]
-                temp_results[data]['var'] = [round(numpy.var(results[num_tours]['RR'][data]), 3), round(numpy.var(results[num_tours]['MMMR'][data]), 3)]
-                temp_results[data]['std'] = [round(numpy.std(results[num_tours]['RR'][data]), 3), round(numpy.std(results[num_tours]['MMMR'][data]), 3)]
-
-            alpha = 0.05
-            for data, run_data in temp_results.items():
-                f.write("     - " + data + ':\n')
-                for statistic, statistic_data in run_data.items():
-                    if statistic == 'avg' or statistic == 'var' or statistic == 'std':
-                        f.write("     - " + statistic + ": RR " + str(statistic_data[0]) + ", MMMMR " + str(statistic_data[1]) + '\n')
-                    else:
-                        p_val = statistic_data[1]
-                        if p_val < alpha:
-                            f.write("         - [X] " + statistic + " test indicates a significant difference (p-value: "+ str(alpha) + '<' + str(round(p_val,3)) + ")\n")
-                        else:
-                            f.write("         - [ ] " + statistic + " test indicates no significant difference (p-value: "+ str(alpha) + '<' + str(round(p_val,3)) + ")\n")
+                if data != 'run best eval':
+                    average_rr = numpy.mean(results[num_tours]['RR'][data])
+                    average_mmmr = numpy.mean(results[num_tours]['MMMR'][data])
+                    avg_percent_improvement = ((average_rr - average_mmmr) / average_mmmr)
+                    best_rr = numpy.min(results[num_tours]['RR'][data])
+                    best_mmmr = numpy.min(results[num_tours]['MMMR'][data])
+                    best_percent_improvement = ((best_rr - best_mmmr) / best_mmmr)
+                    mannwhitneyu_test = mannwhitneyu(results[num_tours]['RR'][data], results[num_tours]['MMMR'][data])
+                    paired_t_test = ttest_rel(results[num_tours]['RR'][data], results[num_tours]['MMMR'][data])
+                    two_sample_t_test = ttest_ind(results[num_tours]['RR'][data], results[num_tours]['MMMR'][data])
+                    f.write(data+','+
+                            str(average_rr)+','+str(average_mmmr)+','+str(avg_percent_improvement)+','+
+                            str(best_rr)+','+str(best_mmmr)+','+str(best_percent_improvement)+','+
+                            str(mannwhitneyu_test[1])+','+str(paired_t_test[1])+','+str(two_sample_t_test[1])+'\n')
 
 def write_per_group_statistics(grouped_data, filename):
     results = defaultdict(dict)
@@ -217,42 +175,31 @@ def write_per_group_statistics(grouped_data, filename):
             for instance, instance_data in tour_data.items():
                 group_name = re.sub(r'\d+$', '', instance)
                 for heuristic_group, heuristic_data in instance_data.items():
-                    if not (group_name in results[num_tours]):
-                        results[num_tours][group_name] = defaultdict(dict)
-                    if not (heuristic_group in results[num_tours][group_name]):
-                        results[num_tours][group_name][heuristic_group] = defaultdict(list)
+                    if not (group_name in results):
+                        results[group_name] = defaultdict(dict)
+                    if not (heuristic_group in results[group_name]):
+                        results[group_name][heuristic_group] = defaultdict(list)
                     for seed, seed_data in heuristic_data.items():
                         for data, run_data in seed_data.items():
-                            results[num_tours][group_name][heuristic_group][data].append(run_data[0])
+                            results[group_name][heuristic_group][data].append(run_data[0])
 
-        for num_tours, tour_data in results.items():
-            f.write(' - k=' + str(num_tours) + '\n')
-            for group_name, group_data in tour_data.items():
-                f.write('     - ' + group_name + '\n')
-                for heuristic_group, heuristic_data in group_data.items():
-                    f.write('         - ' + heuristic_group + '\n')
-                    temp_results = {}
-                    for data, run_data in heuristic_data.items():
-                        temp_results[data] = {}
-                        temp_results[data]['mannwhitneyu'] = mannwhitneyu(heuristic_data['RR'][data], heuristic_data['MMMR'][data])
-                        temp_results[data]['paired_t-test'] = ttest_rel(heuristic_data['RR'][data], heuristic_data['MMMR'][data])
-                        temp_results[data]['two_sample_t-test'] = ttest_ind(heuristic_data['RR'][data], heuristic_data['MMMR'][data])
-                        temp_results[data]['avg'] = [round(numpy.mean(heuristic_data['RR'][data]), 3), round(numpy.mean(heuristic_data['MMMR'][data]), 3)]
-                        temp_results[data]['var'] = [round(numpy.var(heuristic_data['RR'][data]), 3), round(numpy.var(heuristic_data['MMMR'][data]), 3)]
-                        temp_results[data]['std'] = [round(numpy.std(heuristic_data['RR'][data]), 3), round(numpy.std(heuristic_data['MMMR'][data]), 3)]
-
-                    alpha = 0.05
-                    for data, run_data in temp_results.items():
-                        f.write("             - " + data + ':\n')
-                        for statistic, statistic_data in run_data.items():
-                            if statistic == 'avg' or statistic == 'var' or statistic == 'std':
-                                f.write("                 - " + statistic + ": RR " + str(statistic_data[0]) + ", MMMMR " + str(statistic_data[1]) + '\n')
-                            else:
-                                p_val = statistic_data[1]
-                                if p_val < alpha:
-                                    f.write("                 - [X] " + statistic + " test indicates a significant difference (p-value: "+ str(alpha) + '<' + str(round(p_val,3)) + ")\n")
-                                else:
-                                    f.write("                 - [ ] " + statistic + " test indicates no significant difference (p-value: "+ str(alpha) + '<' + str(round(p_val,3)) + "\n")
+        for group_name, group_data in results.items():
+            f.write('instance_group='+group_name+',avg rr,avg mmmr,avg perc impr,best rr,best mmmr, best perc impr, mann, paired t-test, two-sample t-test\n')
+            for data, run_data in group_data['RR'].items():
+                if data != 'run best eval':
+                    average_rr = numpy.mean(group_data['RR'][data])
+                    average_mmmr = numpy.mean(group_data['MMMR'][data])
+                    avg_percent_improvement = ((average_rr - average_mmmr) / average_mmmr)
+                    best_rr = numpy.min(group_data['RR'][data])
+                    best_mmmr = numpy.min(group_data['MMMR'][data])
+                    best_percent_improvement = ((best_rr - best_mmmr) / best_mmmr)
+                    mannwhitneyu_test = mannwhitneyu(group_data['RR'][data], group_data['MMMR'][data])
+                    paired_t_test = ttest_rel(group_data['RR'][data], group_data['MMMR'][data])
+                    two_sample_t_test = ttest_ind(group_data['RR'][data], group_data['MMMR'][data])
+                    f.write(data+','+
+                            str(average_rr)+','+str(average_mmmr)+','+str(avg_percent_improvement)+','+
+                            str(best_rr)+','+str(best_mmmr)+','+str(best_percent_improvement)+','+
+                            str(mannwhitneyu_test[1])+','+str(paired_t_test[1])+','+str(two_sample_t_test[1])+'\n')
 
 def write_per_instance_statistics_to_file(grouped_data, filename):
     with open(filename, 'a') as f:
@@ -302,18 +249,18 @@ def main():
     grouped_data = group_data_by_columns(df, 'routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed')
     
     # Remove unbalanced runs
-    grouped_data = exclude_unbalanced_instances(grouped_data)
+    grouped_data = exclude_unbalanced_runs(grouped_data)
 
     # Clears the results file
     filename = 'results.csv'
     with open(filename, 'w') as f:
         pass
 
-    write_num_instances_per_group_to_file(grouped_data, filename)
     write_statistics_overall(grouped_data, filename)
-    # write_per_group_statistics(grouped_data, filename)
+
     write_per_kvalue_statistics(grouped_data, filename)
-    write_per_instance_statistics_to_file(grouped_data, filename)
+    write_per_group_statistics(grouped_data, filename)
+    # write_per_instance_statistics_to_file(grouped_data, filename)
 
 
     # wandb.init(project="metaga-summary", name='best-obj-summary')
