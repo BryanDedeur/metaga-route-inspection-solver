@@ -54,32 +54,20 @@ def group_data_by_columns(dataframe, *column_keywords):
 def exclude_unbalanced_instances(grouped_data):
     # Initialize variables
     to_remove = []
-    min_seeds = None
-    max_heuristics = 0
 
     # Loop through the groups and find the minimum number of 'ga.random_seed' values
     for num_tours, tour_data in grouped_data.items():
         for instance, instance_data in tour_data.items():
-            max_heuristics = max(max_heuristics, len(instance_data))
-
-    for num_tours, tour_data in grouped_data.items():
-        for instance, instance_data in tour_data.items():            
-            if len(instance_data) != max_heuristics:
-                to_remove.append(((num_tours, instance)))
-                continue
-            num_seeds = 0
+            max_heuristics = 0
             for heuristic_group, heuristic_data in instance_data.items():
-                if len(heuristic_data) == 0:
-                    to_remove.append((num_tours, instance))
-                elif min_seeds is None or len(heuristic_data) < min_seeds:
-                    min_seeds = len(heuristic_data)
-                num_seeds += len(heuristic_data)
-            if num_seeds % len(instance_data) != 0:
-                to_remove.append((num_tours, instance))
+                max_heuristics = max(max_heuristics, len(heuristic_data))
+            for heuristic_group, heuristic_data in instance_data.items():
+                if len(heuristic_data) != max_heuristics:
+                    to_remove.append((num_tours, instance, heuristic_group))
 
     # Remove unbalanced instances from the grouped data
     for group in to_remove:
-        print("Excluding routing.num_tours=" + str(group[0]) + ', instance.name='+group[1] + ' due to unbalanced data')
+        print("Excluding routing.num_tours=" + str(group[0]) + ', instance.name='+group[1] + ' due to unbalanced number of runs in group '+group[2])
         del grouped_data[group[0]][group[1]]
 
     return grouped_data    
@@ -309,17 +297,18 @@ def main():
 
     # Remove state == killed or state == crashed
     df = df[df['State'] == 'finished']
-
+        
     # Group the data and track if known
-    grouped_data = group_data_by_columns(cleaned_df, 'routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed')
-
+    grouped_data = group_data_by_columns(df, 'routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed')
+    
     # Remove unbalanced runs
     grouped_data = exclude_unbalanced_instances(grouped_data)
 
-    # Output high level infomration
-    filename = 'results.md'
+    # Clears the results file
+    filename = 'results.csv'
     with open(filename, 'w') as f:
         pass
+
     write_num_instances_per_group_to_file(grouped_data, filename)
     write_statistics_overall(grouped_data, filename)
     # write_per_group_statistics(grouped_data, filename)
