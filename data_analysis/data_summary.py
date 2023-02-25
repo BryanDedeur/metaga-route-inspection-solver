@@ -217,23 +217,23 @@ def write_per_instance_statistics_to_file(grouped_data, filename):
                                 results[instance][heuristic_group][data] = []
                             results[instance][heuristic_group][data].append(run_data[0])
 
-                f.write(' - Instance ' + instance + ':\n')
-                temp_results = {}
-                for data, run_data in results[instance]['RR'].items():
-                    temp_results[data] = {}
-                    temp_results[data]['mannwhitneyu'] = mannwhitneyu(results[instance]['RR'][data], results[instance]['MMMR'][data])
-                    temp_results[data]['paired_t-test'] = ttest_rel(results[instance]['RR'][data], results[instance]['MMMR'][data])
-                    temp_results[data]['two_sample_t-test'] = ttest_ind(results[instance]['RR'][data], results[instance]['MMMR'][data])
-
-                alpha = 0.05
-                for data, run_data in temp_results.items():
-                    f.write("     - " + data + ':\n')
-                    for statistic, statistic_data in run_data.items():
-                        p_val = statistic_data[1]
-                        if p_val < alpha:
-                            f.write("         - [X] " + statistic + " test indicates a significant difference (p-value: "+ str(alpha) + '<' + str(round(p_val,3)) + ")\n")
-                        else:
-                            f.write("         - [ ] " + statistic + " test indicates no significant difference (p-value: "+ str(alpha) + '<' + str(round(p_val,3)) + ")\n")
+        for group_name, group_data in results.items():
+            f.write('instance='+group_name+',avg rr,avg mmmr,avg perc impr,best rr,best mmmr, best perc impr, mann, paired t-test, two-sample t-test\n')
+            for data, run_data in group_data['RR'].items():
+                if data != 'run best eval':
+                    average_rr = numpy.mean(group_data['RR'][data])
+                    average_mmmr = numpy.mean(group_data['MMMR'][data])
+                    avg_percent_improvement = ((average_rr - average_mmmr) / average_mmmr)
+                    best_rr = numpy.min(group_data['RR'][data])
+                    best_mmmr = numpy.min(group_data['MMMR'][data])
+                    best_percent_improvement = ((best_rr - best_mmmr) / best_mmmr)
+                    mannwhitneyu_test = mannwhitneyu(group_data['RR'][data], group_data['MMMR'][data])
+                    paired_t_test = ttest_rel(group_data['RR'][data], group_data['MMMR'][data])
+                    two_sample_t_test = ttest_ind(group_data['RR'][data], group_data['MMMR'][data])
+                    f.write(data+','+
+                            str(average_rr)+','+str(average_mmmr)+','+str(avg_percent_improvement)+','+
+                            str(best_rr)+','+str(best_mmmr)+','+str(best_percent_improvement)+','+
+                            str(mannwhitneyu_test[1])+','+str(paired_t_test[1])+','+str(two_sample_t_test[1])+'\n')
 
 def main():
     args = parse_args()
@@ -260,7 +260,7 @@ def main():
 
     write_per_kvalue_statistics(grouped_data, filename)
     write_per_group_statistics(grouped_data, filename)
-    # write_per_instance_statistics_to_file(grouped_data, filename)
+    write_per_instance_statistics_to_file(grouped_data, filename)
 
 
     # wandb.init(project="metaga-summary", name='best-obj-summary')
