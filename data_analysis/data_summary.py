@@ -2,6 +2,10 @@ import argparse
 import sys
 import numpy
 import pandas
+import re
+import csv
+
+from collections import defaultdict
 
 from scipy.stats import mannwhitneyu
 from scipy.stats import ttest_rel
@@ -39,11 +43,34 @@ def group_data_by_columns(dataframe, *column_keywords):
         if not ('run best obj' in key):
             key['run best obj']=[]
             key['run best gen']=[]
+            key['run best eval']=[]
 
         key['run best obj'].append(row['run best obj'])
         key['run best gen'].append(row['run best generation'])
+        key['run best eval'].append(row['run best evaluation'])
 
     return ag_data
+
+def exclude_unbalanced_runs(grouped_data):
+    # Initialize variables
+    to_remove = []
+
+    # Loop through the groups and find the minimum number of 'ga.random_seed' values
+    for num_tours, tour_data in grouped_data.items():
+        for instance, instance_data in tour_data.items():
+            sum_heuristic_len = 0
+            for heuristic_group, heuristic_data in instance_data.items():
+                sum_heuristic_len += len(heuristic_data)
+                if (len(heuristic_data) != 30):
+                    to_remove.append((num_tours, instance, heuristic_group))
+                    break
+
+    # Remove unbalanced instances from the grouped data
+    for group in to_remove:
+        print("Excluding routing.num_tours=" + str(group[0]) + ', instance.name='+group[1] + ' due to unbalanced number of runs on heuristic ' + group[2])
+        del grouped_data[group[0]][group[1]]
+
+    return grouped_data    
 
 def produce_statisctics_for_k_values(grouped_data):
     results = {}
@@ -66,55 +93,179 @@ def produce_statisctics_for_k_values(grouped_data):
     print()
     return results
 
+
+def remove_numeric_suffix(string):
+    # Use regular expressions to match the numeric suffix at the end of the string
+    match = re.search(r'\d+$', string)
+    if match:
+        # If a match is found, remove the numeric suffix and return the result
+        return string[:match.start()]
+    else:
+        # If no match is found, return the original string
+        return string
+
+def write_statistics_overall(data, file_path):
+    temp_data = {}
+    for num_tours, tour_data in data.items():
+        for instance, instance_data in tour_data.items():
+            for heuristic_group, heuristic_data in instance_data.items():
+                if not (heuristic_group in temp_data):
+                    temp_data[heuristic_group] = {}
+                for seed, seed_data in heuristic_data.items():
+                    for data, run_data in seed_data.items():
+                        if not (data in temp_data[heuristic_group]):
+                            temp_data[heuristic_group][data] = []
+                        temp_data[heuristic_group][data].append(run_data[0])
+
+    with open(file_path, 'a') as file:
+        file.write('overall,avg rr,avg mmmr,avg perc impr,best rr,best mmmr, best perc impr, mann, paired t-test, two-sample t-test\n')
+        for data, run_data in temp_data['RR'].items():
+            if data != 'run best eval':
+                average_rr = numpy.mean(temp_data['RR'][data])
+                average_mmmr = numpy.mean(temp_data['MMMR'][data])
+                avg_percent_improvement = ((average_rr - average_mmmr) / average_mmmr)
+                best_rr = numpy.min(temp_data['RR'][data])
+                best_mmmr = numpy.min(temp_data['MMMR'][data])
+                best_percent_improvement = ((best_rr - best_mmmr) / best_mmmr)
+                mannwhitneyu_test = mannwhitneyu(temp_data['RR'][data], temp_data['MMMR'][data])
+                paired_t_test = ttest_rel(temp_data['RR'][data], temp_data['MMMR'][data])
+                two_sample_t_test = ttest_ind(temp_data['RR'][data], temp_data['MMMR'][data])
+                file.write(data+','+
+                        str(average_rr)+','+str(average_mmmr)+','+str(avg_percent_improvement)+','+
+                        str(best_rr)+','+str(best_mmmr)+','+str(best_percent_improvement)+','+
+                        str(mannwhitneyu_test[1])+','+str(paired_t_test[1])+','+str(two_sample_t_test[1])+'\n')
+
+def write_per_kvalue_statistics(grouped_data, filename):
+    results = defaultdict(dict)
+    with open(filename, 'a') as f:
+        for num_tours, tour_data in grouped_data.items():
+            for instance, instance_data in tour_data.items():
+                for heuristic_group, heuristic_data in instance_data.items():
+                    if not (heuristic_group in results[num_tours]):
+                        results[num_tours][heuristic_group] = {}
+                    for seed, seed_data in heuristic_data.items():
+                        for data, run_data in seed_data.items():
+                            if not (data in results[num_tours][heuristic_group]):
+                                results[num_tours][heuristic_group][data] = []
+                            results[num_tours][heuristic_group][data].append(run_data[0])
+
+            f.write('k='+str(num_tours)+',avg rr,avg mmmr,avg perc impr,best rr,best mmmr, best perc impr, mann, paired t-test, two-sample t-test\n')
+            for data, run_data in results[num_tours]['RR'].items():
+                if data != 'run best eval':
+                    average_rr = numpy.mean(results[num_tours]['RR'][data])
+                    average_mmmr = numpy.mean(results[num_tours]['MMMR'][data])
+                    avg_percent_improvement = ((average_rr - average_mmmr) / average_mmmr)
+                    best_rr = numpy.min(results[num_tours]['RR'][data])
+                    best_mmmr = numpy.min(results[num_tours]['MMMR'][data])
+                    best_percent_improvement = ((best_rr - best_mmmr) / best_mmmr)
+                    mannwhitneyu_test = mannwhitneyu(results[num_tours]['RR'][data], results[num_tours]['MMMR'][data])
+                    paired_t_test = ttest_rel(results[num_tours]['RR'][data], results[num_tours]['MMMR'][data])
+                    two_sample_t_test = ttest_ind(results[num_tours]['RR'][data], results[num_tours]['MMMR'][data])
+                    f.write(data+','+
+                            str(average_rr)+','+str(average_mmmr)+','+str(avg_percent_improvement)+','+
+                            str(best_rr)+','+str(best_mmmr)+','+str(best_percent_improvement)+','+
+                            str(mannwhitneyu_test[1])+','+str(paired_t_test[1])+','+str(two_sample_t_test[1])+'\n')
+
+def write_per_group_statistics(grouped_data, filename):
+    results = defaultdict(dict)
+    with open(filename, 'a') as f:
+        f.write('## Per group\n')
+        f.write('Comparing heuristic group RR vs MMMR on individual instance groups, all k-values and all runs:\n')
+        for num_tours, tour_data in grouped_data.items():
+            for instance, instance_data in tour_data.items():
+                group_name = re.sub(r'\d+$', '', instance)
+                for heuristic_group, heuristic_data in instance_data.items():
+                    if not (group_name in results):
+                        results[group_name] = defaultdict(dict)
+                    if not (heuristic_group in results[group_name]):
+                        results[group_name][heuristic_group] = defaultdict(list)
+                    for seed, seed_data in heuristic_data.items():
+                        for data, run_data in seed_data.items():
+                            results[group_name][heuristic_group][data].append(run_data[0])
+
+        for group_name, group_data in results.items():
+            f.write('instance_group='+group_name+',avg rr,avg mmmr,avg perc impr,best rr,best mmmr, best perc impr, mann, paired t-test, two-sample t-test\n')
+            for data, run_data in group_data['RR'].items():
+                if data != 'run best eval':
+                    average_rr = numpy.mean(group_data['RR'][data])
+                    average_mmmr = numpy.mean(group_data['MMMR'][data])
+                    avg_percent_improvement = ((average_rr - average_mmmr) / average_mmmr)
+                    best_rr = numpy.min(group_data['RR'][data])
+                    best_mmmr = numpy.min(group_data['MMMR'][data])
+                    best_percent_improvement = ((best_rr - best_mmmr) / best_mmmr)
+                    mannwhitneyu_test = mannwhitneyu(group_data['RR'][data], group_data['MMMR'][data])
+                    paired_t_test = ttest_rel(group_data['RR'][data], group_data['MMMR'][data])
+                    two_sample_t_test = ttest_ind(group_data['RR'][data], group_data['MMMR'][data])
+                    f.write(data+','+
+                            str(average_rr)+','+str(average_mmmr)+','+str(avg_percent_improvement)+','+
+                            str(best_rr)+','+str(best_mmmr)+','+str(best_percent_improvement)+','+
+                            str(mannwhitneyu_test[1])+','+str(paired_t_test[1])+','+str(two_sample_t_test[1])+'\n')
+
+def write_per_instance_statistics_to_file(grouped_data, filename):
+    with open(filename, 'a') as f:
+        results = defaultdict(dict)
+        f.write('## Per Instance Statistics\n')
+        f.write('Comparing heuristic group RR vs MMMR on individual instances, all k-values and all runs:\n')
+        for num_tours, tour_data in grouped_data.items():
+            for instance, instance_data in tour_data.items():
+                for heuristic_group, heuristic_data in instance_data.items():
+                    if not (heuristic_group in results[instance]):
+                        results[instance][heuristic_group] = {}
+                    for seed, seed_data in heuristic_data.items():
+                        for data, run_data in seed_data.items():
+                            if not (data in results[instance][heuristic_group]):
+                                results[instance][heuristic_group][data] = []
+                            results[instance][heuristic_group][data].append(run_data[0])
+
+        for group_name, group_data in results.items():
+            f.write('instance='+group_name+',avg rr,avg mmmr,avg perc impr,best rr,best mmmr, best perc impr, mann, paired t-test, two-sample t-test\n')
+            for data, run_data in group_data['RR'].items():
+                if data != 'run best eval':
+                    average_rr = numpy.mean(group_data['RR'][data])
+                    average_mmmr = numpy.mean(group_data['MMMR'][data])
+                    avg_percent_improvement = ((average_rr - average_mmmr) / average_mmmr)
+                    best_rr = numpy.min(group_data['RR'][data])
+                    best_mmmr = numpy.min(group_data['MMMR'][data])
+                    best_percent_improvement = ((best_rr - best_mmmr) / best_mmmr)
+                    mannwhitneyu_test = mannwhitneyu(group_data['RR'][data], group_data['MMMR'][data])
+                    paired_t_test = ttest_rel(group_data['RR'][data], group_data['MMMR'][data])
+                    two_sample_t_test = ttest_ind(group_data['RR'][data], group_data['MMMR'][data])
+                    f.write(data+','+
+                            str(average_rr)+','+str(average_mmmr)+','+str(avg_percent_improvement)+','+
+                            str(best_rr)+','+str(best_mmmr)+','+str(best_percent_improvement)+','+
+                            str(mannwhitneyu_test[1])+','+str(paired_t_test[1])+','+str(two_sample_t_test[1])+'\n')
+
 def main():
     args = parse_args()
     df = pandas.read_csv(args.data_file)
 
-    grouped_data = group_data_by_columns(df, 'routing.num_tours', 'routing.heuristic_group')
-    produce_statisctics_for_k_values(grouped_data)
+    # drop duplicates based on these columns
+    df = df.drop_duplicates(subset=['routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed'])
 
-    # Compute the per instance statistics
-    grouped_data = group_data_by_columns(df, 'routing.num_tours', 'instance.name', 'routing.heuristic_group')
+    # Remove state == killed or state == crashed
+    df = df[df['State'] == 'finished']
+        
+    # Group the data and track if known
+    grouped_data = group_data_by_columns(df, 'routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed')
+    
+    # Remove unbalanced runs
+    grouped_data = exclude_unbalanced_runs(grouped_data)
 
-    data_best_obj = []
-    for num_tours in grouped_data:
-        for instance in grouped_data[num_tours]:
-            for heuristic_group in grouped_data[num_tours][instance]:
-                grouped_data[num_tours][instance][heuristic_group]['run best obj'] = numpy.array(grouped_data[num_tours][instance][heuristic_group]['run best obj'])
-                grouped_data[num_tours][instance][heuristic_group]['run avg best obj'] = numpy.mean(grouped_data[num_tours][instance][heuristic_group]['run best obj'])
-                grouped_data[num_tours][instance][heuristic_group]['run best gen'] = numpy.array(grouped_data[num_tours][instance][heuristic_group]['run best gen'])
-                grouped_data[num_tours][instance][heuristic_group]['run avg best gen'] = numpy.mean(grouped_data[num_tours][instance][heuristic_group]['run best gen'])
+    # Clears the results file
+    filename = 'results.csv'
+    with open(filename, 'w') as f:
+        pass
 
-            # add means and compute statistics
-            temp_data = [num_tours, instance]
-            temp_data.append(round(grouped_data[num_tours][instance]['RR']['run avg best obj'], 4))
-            temp_data.append(round(grouped_data[num_tours][instance]['MMMR']['run avg best obj'], 4))
-            data_1 = grouped_data[num_tours][instance]['RR']['run best obj']
-            data_2 = grouped_data[num_tours][instance]['MMMR']['run best obj']
-            stat, p_value = mannwhitneyu(data_1, data_2)
-            temp_data.append(str(round(p_value, 3)))
-            temp_data.append(str(p_value < 0.05))
+    write_statistics_overall(grouped_data, filename)
 
-            temp_data.append(round(grouped_data[num_tours][instance]['RR']['run avg best gen'], 4))
-            temp_data.append(round(grouped_data[num_tours][instance]['MMMR']['run avg best gen'], 4))
-            data_1 = grouped_data[num_tours][instance]['RR']['run best gen']
-            data_2 = grouped_data[num_tours][instance]['MMMR']['run best gen']
-            stat, p_value = mannwhitneyu(data_1, data_2)
-            temp_data.append(str(round(p_value, 3)))
-            temp_data.append(str(p_value < 0.05))
-            data_best_obj.append(temp_data)
-            
-    columns=["k", "instance", "RR ave best obj", "MMMR ave best obj", 'obj p-value', 'obj sig_diff', 'RR ave best gen', 'MMMR ave best gen', 'gen p-value', 'gen sig_diff']
-
-    # data_1 = numpy.array(data_best_obj)[:,2].astype(numpy.float32).tolist()
-    # data_2 = numpy.array(data_best_obj)[:,3].astype(numpy.float32).tolist()
-
-    # stat, p_value = mannwhitneyu(data_1, data_2)
+    write_per_kvalue_statistics(grouped_data, filename)
+    write_per_group_statistics(grouped_data, filename)
+    write_per_instance_statistics_to_file(grouped_data, filename)
 
 
-    wandb.init(project="metaga-summary", name='best-obj-summary')
-    table = wandb.Table(data=data_best_obj, columns=columns)
-    wandb.log({"avg best objectives": table})
+    # wandb.init(project="metaga-summary", name='best-obj-summary')
+    # table = wandb.Table(data=data_best_obj, columns=columns)
+    # wandb.log({"avg best objectives": table})
 
     pass
 
