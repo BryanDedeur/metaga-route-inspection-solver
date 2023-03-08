@@ -29,6 +29,11 @@ class Router:
 			gene_len = len(bin(gph.maxVertexDegree)[2:]) # the binary representation of max vertex degree
 			for i in range(pow(2,gene_len)): 
 				self.heuristics.append(self.add_edges_to_shortest_tour_with_round_robin_nearest_unvisited_equidistant)
+		elif self.heuristics_group == 'MIN':
+			self.heuristics = [            
+				self.add_edges_to_shortest_tour_with_min_cost_edge_from_nearest_unvisited_equidistant, # min cost
+			]
+
 
 		for i in range(len(depots)):
 			self.tours.append(tour.Tour(self.graph))

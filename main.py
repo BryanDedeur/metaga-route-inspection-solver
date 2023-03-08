@@ -37,27 +37,15 @@ def main():
     gph = Graph(args.instance)
 
     # create a router for constructing tours
-    router = Router(gph, args.k_depots, args.heuristics)
-
-    gene_len = 0
-
-    if args.heuristics == 'MMMR':
-        gene_len = 2 # for 4 total heuristics
-    elif args.heuristics == 'RR':
-        gene_len = len(bin(gph.maxVertexDegree)[2:]) # the binary representation
+    router = Router(gph, args.k_depots, 'MIN')
 
     # find the chromosome lengths based on the heuristics
-    chrom_len = gph.size_e() * gene_len
+    chrom_len = gph.size_e()
+
+    heuristic_id = 0
 
     # define the fitness function
-    def evaluate(ga, chromosome, individual_id):
-        decoding = []
-        for i in range(0, len(chromosome), ga.gene_len):
-            decimal = 0
-            for j in range(ga.gene_len):
-                decimal = decimal * 2 + chromosome[i + j]
-            decoding.append(decimal)
-
+    def evaluate():
         router.clear()
 
         # add first vertex to tour
@@ -65,8 +53,8 @@ def main():
             tour.add_vertex(tour.depot)
 
         # convert the heuristics to tours
-        for h in decoding:
-            router.heuristics[h](h)
+        for h in range(chrom_len):
+            router.heuristics[heuristic_id](heuristic_id)
 
         # return all tours to their depots
         for tour in router.tours:
@@ -74,51 +62,35 @@ def main():
 
         # compute objective
         objective = router.get_length_of_longest_tour()
-        fitness = 1/objective
-
-        # check if best
-        if ga.best_fitness < fitness:
-            ga.best_fitness = fitness
-            ga.best_binary = numpy.copy(chromosome)
-            ga.best_evaluation = ga.num_evaluations
-            ga.best_generation = ga.ga_instance.generations_completed
-            ga.best_time_seconds = time.time() - ga.run_time_start
-            ga.best_solution = router.get_route()
-            decoding = numpy.array(decoding)
-            heuristic_data = {}
-            for h in range(len(router.heuristics)):
-                heuristic_data[h] = numpy.count_nonzero(decoding == h)
-            ga.best_heuristics = heuristic_data
-
-        return fitness
+        return objective
     
-    def log_data(ga):
-        wandb.log(ga.log_data)
+    duration = time.time()
+    objective = evaluate()
+    duration = time.time() - duration
 
-    # create the metaga
-    metaga = MetaGA(gene_len, chrom_len, evaluate, log_data)
+    log_data = {}
+    log_data['gen min obj'] = objective
+    log_data['gen mean obj'] = objective
+    log_data['gen max obj'] = objective
+    log_data['gen time(s)'] = duration
+    log_data['total run time(s)'] = duration
+    log_data['run best evaluation'] = 1
+    log_data['run best time(s)'] = duration
+    log_data['run best generation'] = 1
+    log_data['run best obj'] = objective
+    log_data['run best binary'] = [heuristic_id] * chrom_len
+    log_data['run best route'] = router.get_route()
+    log_data['run best heuristics'] = [heuristic_id] * chrom_len
+    log_data['run time(s)'] =duration
 
-    print('Running MetaGA on '+ str(len(args.seeds)) +' seeds:')
-    for seed in args.seeds:
-        metaga.create(seed)
-        wandb.config = {
-            'ga' : metaga.config,
-            'instance' : gph.config,
-            'routing' : router.config
-        }
-
-        wandb.init(project="metaga-data", name=gph.name +'_'+ str(seed), config=wandb.config)
-        metaga.run()
-        wandb.log(metaga.log_data)
-        wandb.finish()
-
-
-    # output the final results
-    # print('overall best: ' + str(round(meta_ga.getOverallBestObj(),2)))
-    # print('per seed average best: ' + str(round(meta_ga.getAveSeedBestObj(),2)))
-    # print('per seed average num evaluations to achieve near best: ' + str(round(meta_ga.getAveNumEvalsToAveBest(),2)))
-    # print('per seed reliability: ' + str(round(meta_ga.getReliability(),2)))
-    # print('overall time: ' + str(round(meta_ga.seedTimeStats.sum,2)) + 's')
+    wandb.config = {
+        'instance' : gph.config,
+        'routing' : router.config
+    }
+    
+    wandb.init(project="metaga-data", name=gph.name + '-min-heur', config=wandb.config)
+    wandb.log(log_data)
+    wandb.finish()
 
 if __name__ == '__main__':
     main()

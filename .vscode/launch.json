@@ -18,7 +18,7 @@
             "type": "python",
             "request": "launch",
             "program": "main.py",
-            "args": ["-i benchmarks/gdb/C05.dat", "-k 0,0", "-s 8115,3520,8647,9420,3116,6377", "-j MMMR"],
+            "args": ["-i bridge-graph-instances/standard/howe/howe1.csv", "-k 0,0", "-s 0", "-j MMMR"],
             "console": "integratedTerminal"
         },
     ]
