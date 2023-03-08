@@ -17,7 +17,7 @@
             "type": "python",
             "request": "launch",
             "program": "main.py",
-            "args": ["-i benchmarks/gdb/gdb1.dat", "-k 0,0", "-s 8115,3520,8647,9420,3116,6377", "-j MMMR", "--silent"],
+            "args": ["-i benchmarks/gdb/gdb1.dat", "-k 0,0", "-s 8115,3520,8647,9420,3116,6377", "-j MMMR"],
             "console": "integratedTerminal"
         },
     ]

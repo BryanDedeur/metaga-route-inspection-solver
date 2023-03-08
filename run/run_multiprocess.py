@@ -65,7 +65,7 @@ if __name__ == '__main__':
             if '.obj' in instance:
                 continue
             for heuristic in heuristics:
-                arguments = "-i " + instance + " -k " + depots + " -s " + seeds + " -j " + heuristic
+                arguments = "-i " + instance + " -k " + depots + " -s " + seeds + " -j " + heuristic + "--silent"
                 print(arguments)
                 pool.apply_async(run_exe, (arguments,))
 
