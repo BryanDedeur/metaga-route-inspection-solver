@@ -21,8 +21,8 @@ class Router:
 			gene_len = 2 # for 4 total heuristics
 			self.heuristics = [            
 				self.add_edges_to_shortest_tour_with_min_cost_edge_from_nearest_unvisited_equidistant, # min cost
-				self.add_edges_to_shortest_tour_with_mean_cost_edge_from_nearest_unvisited_equidistant, # median cost 
-				self.add_edges_to_shortest_tour_with_mean_cost_edge_from_nearest_unvisited_equidistant, # max cost
+				self.add_edges_to_shortest_tour_with_median_cost_edge_from_nearest_unvisited_equidistant, # median cost 
+				self.add_edges_to_shortest_tour_with_max_cost_edge_from_nearest_unvisited_equidistant, # max cost
 				self.add_edges_to_shortest_tour_with_random_cost_edge_from_nearest_unvisited_equidistant # random cost 
 			]
 		elif self.heuristics_group == 'RR':
@@ -241,8 +241,8 @@ class Router:
 		# append all edges including selected edge
 		self.extend_tour_to_edge(min_cost_edge, shortest_tour)
 
-	# add edges to shortest tour considering mean cost from nearest unvisited equidistant set
-	def add_edges_to_shortest_tour_with_mean_cost_edge_from_nearest_unvisited_equidistant(self, heuristic_id : int):
+	# add edges to shortest tour considering median cost from nearest unvisited equidistant set
+	def add_edges_to_shortest_tour_with_median_cost_edge_from_nearest_unvisited_equidistant(self, heuristic_id : int):
 		# find shortest tour last vertex
 		shortest_tour = self.get_shortest_tour()
 		last_vertex = shortest_tour.vertexSequence[-1]
@@ -252,12 +252,12 @@ class Router:
 		if len(nearest_equidistant_edges) == 0:
 			return -1
 		# select the min cost edge
-		mean_cost_edge = nearest_equidistant_edges[len(nearest_equidistant_edges) // 2]
+		median_cost_edge = nearest_equidistant_edges[len(nearest_equidistant_edges) // 2]
 		# append all edges including selected edge
-		self.extend_tour_to_edge(mean_cost_edge, shortest_tour)
+		self.extend_tour_to_edge(median_cost_edge, shortest_tour)
 
 	# add edges to shortest tour considering max cost from nearest unvisited equidistant set
-	def add_edges_to_shortest_tour_with_mean_cost_edge_from_nearest_unvisited_equidistant(self, heuristic_id : int):
+	def add_edges_to_shortest_tour_with_max_cost_edge_from_nearest_unvisited_equidistant(self, heuristic_id : int):
 		# find shortest tour last vertex
 		shortest_tour = self.get_shortest_tour()
 		last_vertex = shortest_tour.vertexSequence[-1]
