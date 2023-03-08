@@ -36,11 +36,11 @@ def find_files_with_extension(dir, extensions):
     return file_paths
 
 if __name__ == '__main__':
-    num_cores = multiprocessing.cpu_count()
+    num_cores = multiprocessing.cpu_count() - 1
     processes = []
 
     extensions = ('.dat', '.csv')
-    instances = find_files_with_extension("benchmark_subset", extensions)
+    instances = find_files_with_extension("../benchmark_subset", extensions)
 
     # seeds
     seeds = "8115,3520,8647,9420,3116,6377,6207,4187,3641,8591,3580,8524,2650,2811,9963,7537,3472,3714,8158,7284,6948,6119,5253,5134,7350,2652,9968,3914,6899,4715"
@@ -65,13 +65,8 @@ if __name__ == '__main__':
             if '.obj' in instance:
                 continue
             for heuristic in heuristics:
-                arguments = "-i " + instance + " -k " + depots + " -s " + seeds + " -j " + heuristic + "--silent"
-                print(arguments)
+                arguments = "-i " + instance + " -k " + depots + " -s " + seeds + " -j " + heuristic + " --silent"
                 pool.apply_async(run_exe, (arguments,))
-
-                p = multiprocessing.Process(target=run_exe, args=(arguments,))
-                processes.append(p)
-                p.start()
 
     # close the pool to prevent any more tasks from being added
     pool.close()
