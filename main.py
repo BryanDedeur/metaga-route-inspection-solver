@@ -3,6 +3,7 @@ import sys
 import wandb
 import numpy
 import time
+import os
 
 from os import path
 from graph import Graph
@@ -17,6 +18,7 @@ def parse_args():
     # parser.add_argument('-d', '--depots', dest='depots', type=str, required=True, help='the deployment configuration (single, multi). ex: -d single')
     parser.add_argument('-s', '--seeds', dest='seeds', type=str, required=True, help='random seeds to run the ga. ex: -s 1234,3949')
     parser.add_argument('-j', '--heuristics', dest='heuristics', type=str, default='MMMR', required=False, help='the set of heuristics (MMMR, RR). ex: -j MMMR')
+    parser.add_argument('--silent', dest='silent', default=False, action='store_true', help='enable silent mode')    
     args = parser.parse_args()
 
     # check and adjust the parsed args
@@ -32,6 +34,12 @@ def parse_args():
 def main():
     # capturing the arguements
     args = parse_args()
+
+    # Define the print function
+    if args.silent or os.getenv('SILENT_MODE') == '1':
+        os.environ['SILENT_MODE'] = '1'
+
+    print('Running MetaGA on '+args.instance+', '+str(args.k_depots)+' depots, ' +str(len(args.seeds)) +' seeds, ' + args.heuristics +' heuristics')
 
     # create the graph
     gph = Graph(args.instance)
@@ -98,7 +106,6 @@ def main():
     # create the metaga
     metaga = MetaGA(gene_len, chrom_len, evaluate, log_data)
 
-    print('Running MetaGA on '+ str(len(args.seeds)) +' seeds:')
     for seed in args.seeds:
         metaga.create(seed)
         wandb.config = {

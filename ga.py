@@ -2,9 +2,18 @@ import numpy #must be version <1.20.X
 import pygad
 import time
 import wandb
+import os
 
 class MetaGA:
     def __init__(self, gene_len : int, chrom_len : int, eval_function, log_data_function):
+        # Define the print function
+        if os.getenv('SILENT_MODE') == '1':
+            def print_silent(*args, **kwargs):
+                pass
+            self.print = print_silent
+        else:
+            self.print = print
+
         self.ga_instance = None
         self.gene_len = gene_len
         self.chrom_len = chrom_len
@@ -40,7 +49,7 @@ class MetaGA:
         def on_start(ga_instance):
             self.gen_start_time = time.time()
             self.run_start_time = time.time()
-            print(str(self.run_count) + '. MetaGA run (seed:'+ str(ga_instance.random_seed) +'): [', end = '')
+            self.print(str(self.run_count) + '. MetaGA run (seed:'+ str(ga_instance.random_seed) +'): [', end = '')
 
         def on_fitness(ga_instance, population_fitness):
 
@@ -64,7 +73,7 @@ class MetaGA:
         def on_generation(ga_instance):
 
             if (ga_instance.generations_completed % int(ga_instance.num_generations * 0.05) == 0):
-                print('.', end = '')
+                self.print('.', end = '')
             
             self.log_data['gen time(s)'] = time.time() - self.gen_start_time
             self.log_data['total run time(s)'] = time.time() - self.run_start_time
@@ -75,7 +84,7 @@ class MetaGA:
 
         def on_stop(ga_instance, last_population_fitness):
             self.run_time_seconds = time.time() - self.run_time_start
-            print('] in ' + str(round(self.run_time_seconds, 3)) + 's')
+            self.print('] in ' + str(round(self.run_time_seconds, 3)) + 's')
             self.log_data = {}
             self.log_data['run best evaluation'] = self.best_evaluation
             self.log_data['run best time(s)'] = self.best_time_seconds

@@ -9,6 +9,14 @@ from tour import Tour
 
 class Graph:
     def __init__(self, filepath):
+        # Define the print function
+        if os.getenv('SILENT_MODE') == '1':
+            def print_silent(*args, **kwargs):
+                pass
+            self.print = print_silent
+        else:
+            self.print = print
+        
         self.filepath = filepath
         self.filename = os.path.basename(filepath)
         self.name = os.path.splitext(self.filename)[0]
@@ -24,7 +32,7 @@ class Graph:
         self.minVertexDegree = 99999999999
         self.sumVertexDegree = 0
         
-        print('Loading graph ' + self.filename + '...', end='')
+        self.print('Loading graph ' + self.filename + '...', end='')
         extension = os.path.splitext(self.filename)[1]
         if extension == '.csv':
             self.load_csv(filepath)
@@ -32,7 +40,7 @@ class Graph:
             self.load_json(filepath)
         elif extension == '.dat':
             self.load_dat(filepath)
-        print(' Success! (vertices:' + str(self.size_v()) + ' edges:' + str(self.size_e()) + ')')
+        self.print(' Success! (vertices:' + str(self.size_v()) + ' edges:' + str(self.size_e()) + ')')
 
 
         
@@ -232,7 +240,7 @@ class Graph:
         #         if (self.edgeMatrix[r][c] == id):
         #             return (r, c)
         # # This is dangerous but nescessary to flag issues
-        # print("Edge id:" + str(id) + " does not exist, but trying to access it.")
+        # self.print("Edge id:" + str(id) + " does not exist, but trying to access it.")
         # return (-1,-1)
 
     def get_edge(self, v1,  v2):
@@ -327,7 +335,7 @@ class Graph:
             if (not spSet[v] and dist[v] <= best[1]):
                 best = (v, dist[v])
         if (best[0] == -1):
-            print("No better min distance found, so returning an invalid vertex.")
+            self.print("No better min distance found, so returning an invalid vertex.")
         return best[0]
 
     def dijkstras(self, src):
