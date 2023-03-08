@@ -16,7 +16,7 @@ def parse_args():
     parser.add_argument('-k', '--k-depots', dest='k_depots', type=str, required=True, help='k num tours determined by the depots. ex: -k 0,0')
     # parser.add_argument('-d', '--depots', dest='depots', type=str, required=True, help='the deployment configuration (single, multi). ex: -d single')
     parser.add_argument('-s', '--seeds', dest='seeds', type=str, required=True, help='random seeds to run the ga. ex: -s 1234,3949')
-    parser.add_argument('-j', '--heuristics', dest='heuristics', type=str, default='MMMR', required=False, help='the set of heuristics (MMMR, RR). ex: -j MMMR')
+    parser.add_argument('-j', '--heuristics', dest='heuristics', type=str, default='MIN-MIN', required=False, help='the set of heuristics (MIN-MIN, MIN-MAX, MIN-RANDOM). ex: -j MMMR')
     args = parser.parse_args()
 
     # check and adjust the parsed args
@@ -37,7 +37,7 @@ def main():
     gph = Graph(args.instance)
 
     # create a router for constructing tours
-    router = Router(gph, args.k_depots, 'MIN')
+    router = Router(gph, args.k_depots, args.heuristics)
 
     # find the chromosome lengths based on the heuristics
     chrom_len = gph.size_e()
