@@ -36,7 +36,7 @@ def find_files_with_extension(dir, extensions):
     return file_paths
 
 if __name__ == '__main__':
-    num_cores = multiprocessing.cpu_count() - 1
+    num_cores = multiprocessing.cpu_count()
     processes = []
 
     extensions = ('.dat', '.csv')
