@@ -65,7 +65,7 @@ def main():
             for j in range(ga.gene_len):
                 decimal = decimal * 2 + chromosome[i + j]
             decoding.append(decimal)
-
+            
         router.clear()
 
         # add first vertex to tour
@@ -107,6 +107,7 @@ def main():
     metaga = MetaGA(gene_len, chrom_len, evaluate, log_data)
 
     for seed in args.seeds:
+        router.set_seed(seed)
         metaga.create(seed)
         wandb.config = {
             'ga' : metaga.config,
