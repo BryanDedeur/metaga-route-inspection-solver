@@ -33,6 +33,18 @@ class Router:
 			self.heuristics = [            
 				self.add_edges_to_shortest_tour_with_min_cost_edge_from_nearest_unvisited_equidistant, # min cost
 			]
+		elif self.heuristics_group == 'MIN-MEDIAN':
+			self.heuristics = [            
+				self.add_edges_to_shortest_tour_with_median_cost_edge_from_nearest_unvisited_equidistant, # min cost
+			]
+		elif self.heuristics_group == 'MIN-MAX':
+			self.heuristics = [            
+				self.add_edges_to_shortest_tour_with_max_cost_edge_from_nearest_unvisited_equidistant, # min cost
+			]
+		elif self.heuristics_group == 'MIN-RANDOM':
+			self.heuristics = [            
+				self.add_edges_to_shortest_tour_with_random_cost_edge_from_nearest_unvisited_equidistant, # min cost
+			]
 
 
 		for i in range(len(depots)):

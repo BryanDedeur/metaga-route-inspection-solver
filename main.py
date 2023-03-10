@@ -36,61 +36,63 @@ def main():
     # create the graph
     gph = Graph(args.instance)
 
-    # create a router for constructing tours
-    router = Router(gph, args.k_depots, args.heuristics)
-
     # find the chromosome lengths based on the heuristics
     chrom_len = gph.size_e()
 
     heuristic_id = 0
-
-    # define the fitness function
-    def evaluate():
-        router.clear()
-
-        # add first vertex to tour
-        for tour in router.tours:
-            tour.add_vertex(tour.depot)
-
-        # convert the heuristics to tours
-        for h in range(chrom_len):
-            router.heuristics[heuristic_id](heuristic_id)
-
-        # return all tours to their depots
-        for tour in router.tours:
-            tour.add_vertex(tour.depot)
-
-        # compute objective
-        objective = router.get_length_of_longest_tour()
-        return objective
     
-    duration = time.time()
-    objective = evaluate()
-    duration = time.time() - duration
+    for seed in args.seeds:
+        # create a router for constructing tours
+        router = Router(gph, args.k_depots, args.heuristics)
+        router.set_seed(seed)
 
-    log_data = {}
-    log_data['gen min obj'] = objective
-    log_data['gen mean obj'] = objective
-    log_data['gen max obj'] = objective
-    log_data['gen time(s)'] = duration
-    log_data['total run time(s)'] = duration
-    log_data['run best evaluation'] = 1
-    log_data['run best time(s)'] = duration
-    log_data['run best generation'] = 1
-    log_data['run best obj'] = objective
-    log_data['run best binary'] = [heuristic_id] * chrom_len
-    log_data['run best route'] = router.get_route()
-    log_data['run best heuristics'] = [heuristic_id] * chrom_len
-    log_data['run time(s)'] =duration
+        # define the fitness function
+        def evaluate():
+            router.clear()
 
-    wandb.config = {
-        'instance' : gph.config,
-        'routing' : router.config
-    }
-    
-    wandb.init(project="metaga-data", name=gph.name + '-min-heur', config=wandb.config)
-    wandb.log(log_data)
-    wandb.finish()
+            # add first vertex to tour
+            for tour in router.tours:
+                tour.add_vertex(tour.depot)
+
+            # convert the heuristics to tours
+            for h in range(chrom_len):
+                router.heuristics[heuristic_id](heuristic_id)
+
+            # return all tours to their depots
+            for tour in router.tours:
+                tour.add_vertex(tour.depot)
+
+            # compute objective
+            objective = router.get_length_of_longest_tour()
+            return objective
+
+        duration = time.time()
+        objective = evaluate()
+        duration = time.time() - duration
+
+        log_data = {}
+        log_data['gen min obj'] = objective
+        log_data['gen mean obj'] = objective
+        log_data['gen max obj'] = objective
+        log_data['gen time(s)'] = duration
+        log_data['total run time(s)'] = duration
+        log_data['run best evaluation'] = 1
+        log_data['run best time(s)'] = duration
+        log_data['run best generation'] = 1
+        log_data['run best obj'] = objective
+        log_data['run best binary'] = [heuristic_id] * chrom_len
+        log_data['run best route'] = router.get_route()
+        log_data['run best heuristics'] = [heuristic_id] * chrom_len
+        log_data['run time(s)'] =duration
+
+        wandb.config = {
+            'instance' : gph.config,
+            'routing' : router.config
+        }
+        
+        wandb.init(project="metaga-data", name=gph.name + '-'+ str(seed), config=wandb.config)
+        wandb.log(log_data)
+        wandb.finish()
 
 if __name__ == '__main__':
     main()
