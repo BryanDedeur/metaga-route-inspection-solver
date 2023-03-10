@@ -15,6 +15,35 @@ import wandb
 
 from os import path
 
+def get_data_from_wandb_api():
+    api = wandb.Api()
+
+    # Project is specified by <entity/project-name>
+    runs = api.runs("bryandedeur/metaga-data")
+
+    summary_list, config_list, name_list = [], [], []
+    for run in runs: 
+        # .summary contains the output keys/values for metrics like accuracy.
+        #  We call ._json_dict to omit large files 
+        summary_list.append(run.summary._json_dict)
+
+        # .config contains the hyperparameters.
+        #  We remove special values that start with _.
+        config_list.append(
+            {k: v for k,v in run.config.items()
+            if not k.startswith('_')})
+
+        # .name is the human-readable name of the run.
+        name_list.append(run.name)
+
+    runs_df = pandas.DataFrame({
+        "summary": summary_list,
+        "config": config_list,
+        "name": name_list
+        })
+
+    runs_df.to_csv("export2.csv")
+
 def parse_args():
     # capture the args with the parser
     parser = argparse.ArgumentParser(description=None)
@@ -261,41 +290,37 @@ def write_per_instance_statistics_to_file(grouped_data, filename):
                     
 def write_per_kvalue_per_instance_objective_percent_improvement(grouped_data, filename):
     with open(filename, 'a') as f:
-        results = defaultdict(dict)
+        order_of_heuristics = ['MMMR', 'RR', 'MIN-MIN', 'MIN-MEDIAN', 'MIN-MAX', 'MIN-RANDOM']
         f.write('## Per K-Value, Per Instance, Avg Objective Percent Improvement \n')
         f.write('Comparing all heuristic groups on individual instances, all k-values and all runs avg best objective:\n')
         for num_tours, tour_data in grouped_data.items():
+            output = 'k='+str(num_tours)+'\n'
+            f.write(output+'\n')
             for instance, instance_data in tour_data.items():
                 results = defaultdict(dict)
                 # output the header
-                output = ','
-                for heuristic_group, heuristic_data in instance_data.items():
-                    if heuristic_group == 'MMMR':
-                        output += heuristic_group+' avg best obj,'
-                    else:
-                        output += heuristic_group+' perc improvement,'
-                f.write(output+'\n')
                 for heuristic_group, heuristic_data in instance_data.items():
                     results[heuristic_group] = []
                     for seed, seed_data in heuristic_data.items():
-                        if seed_data['run best obj'][0] == {}:
-                            # Do something when the value is an empty dictionary
-                            pass
-                        else:
-                            results[heuristic_group].append(seed_data['run best obj'][0])
+                        results[heuristic_group].append(seed_data['run best obj'][0])
             
                 output = 'instance='+instance+','
                 avg_best_mmmr_obj = numpy.mean(results['MMMR'])
-                for heuristic_group, heuristic_data in results.items():
-                    if heuristic_group == 'MMMR':
-                        output += str(avg_best_mmmr_obj)+','
+                for heuristic_group in order_of_heuristics:
+                    if len(results[heuristic_group]) != 0:
+                        if heuristic_group == 'MMMR':
+                            output += str(avg_best_mmmr_obj)+','
+                        else:
+                            avg_best_obj = numpy.mean(results[heuristic_group])
+                            perc_improvement = -1 * ((avg_best_obj - avg_best_mmmr_obj) / avg_best_mmmr_obj)
+                            output += str(perc_improvement)+','
                     else:
-                        avg_best_obj = numpy.mean(heuristic_data)
-                        perc_improvement = ((avg_best_obj - avg_best_mmmr_obj) / avg_best_mmmr_obj)
-                        output += str(perc_improvement)+','
+                        output += ','
                 f.write(output + '\n') 
 
 def main():
+    # get_data_from_wandb_api()
+
     args = parse_args()
     df = pandas.read_csv(args.data_file)
 
