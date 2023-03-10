@@ -51,6 +51,30 @@ def group_data_by_columns(dataframe, *column_keywords):
 
     return ag_data
 
+def average_data_by_columns(dataframe, *column_keywords):
+    ag_data = {} #[num tours][instance][heuristic]
+
+    # Loop through the rows of the dataframe
+    for index, row in dataframe.iterrows():
+        # Access data for each column by column name
+        key = ag_data
+        for keyword in column_keywords:
+            value = row[keyword]
+            if value not in key:
+                key[value] = {}
+            key = key[value]
+
+        if not ('run best obj' in key):
+            key['run best obj']=[]
+            key['run best gen']=[]
+            key['run best eval']=[]
+
+        key['run best obj'].append(row['run best obj'])
+        key['run best gen'].append(row['run best generation'])
+        key['run best eval'].append(row['run best evaluation'])
+
+    return ag_data
+
 def exclude_unbalanced_runs(grouped_data):
     # Initialize variables
     to_remove = []
@@ -234,6 +258,42 @@ def write_per_instance_statistics_to_file(grouped_data, filename):
                             str(average_rr)+','+str(average_mmmr)+','+str(avg_percent_improvement)+','+
                             str(best_rr)+','+str(best_mmmr)+','+str(best_percent_improvement)+','+
                             str(mannwhitneyu_test[1])+','+str(paired_t_test[1])+','+str(two_sample_t_test[1])+'\n')
+                    
+def write_per_kvalue_per_instance_objective_percent_improvement(grouped_data, filename):
+    with open(filename, 'a') as f:
+        results = defaultdict(dict)
+        f.write('## Per K-Value, Per Instance, Avg Objective Percent Improvement \n')
+        f.write('Comparing all heuristic groups on individual instances, all k-values and all runs avg best objective:\n')
+        for num_tours, tour_data in grouped_data.items():
+            for instance, instance_data in tour_data.items():
+                results = defaultdict(dict)
+                # output the header
+                output = ','
+                for heuristic_group, heuristic_data in instance_data.items():
+                    if heuristic_group == 'MMMR':
+                        output += heuristic_group+' avg best obj,'
+                    else:
+                        output += heuristic_group+' perc improvement,'
+                f.write(output+'\n')
+                for heuristic_group, heuristic_data in instance_data.items():
+                    results[heuristic_group] = []
+                    for seed, seed_data in heuristic_data.items():
+                        if seed_data['run best obj'][0] == {}:
+                            # Do something when the value is an empty dictionary
+                            pass
+                        else:
+                            results[heuristic_group].append(seed_data['run best obj'][0])
+            
+                output = 'instance='+instance+','
+                avg_best_mmmr_obj = numpy.mean(results['MMMR'])
+                for heuristic_group, heuristic_data in results.items():
+                    if heuristic_group == 'MMMR':
+                        output += str(avg_best_mmmr_obj)+','
+                    else:
+                        avg_best_obj = numpy.mean(heuristic_data)
+                        perc_improvement = ((avg_best_obj - avg_best_mmmr_obj) / avg_best_mmmr_obj)
+                        output += str(perc_improvement)+','
+                f.write(output + '\n') 
 
 def main():
     args = parse_args()
@@ -247,20 +307,25 @@ def main():
         
     # Group the data and track if known
     grouped_data = group_data_by_columns(df, 'routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed')
-    
-    # Remove unbalanced runs
-    grouped_data = exclude_unbalanced_runs(grouped_data)
 
     # Clears the results file
     filename = 'results.csv'
     with open(filename, 'w') as f:
         pass
 
-    write_statistics_overall(grouped_data, filename)
+    # For comparing all heuristic groups to eachother without statistical tests
+    write_per_kvalue_per_instance_objective_percent_improvement(grouped_data, filename)
+    
+    # # Remove unbalanced runs
+    # grouped_data = exclude_unbalanced_runs(grouped_data)
 
-    write_per_kvalue_statistics(grouped_data, filename)
-    write_per_group_statistics(grouped_data, filename)
-    write_per_instance_statistics_to_file(grouped_data, filename)
+    # For comparing one heuristic to another with statistical tests
+    # write_statistics_overall(grouped_data, filename)
+    # write_per_kvalue_statistics(grouped_data, filename)
+    # write_per_group_statistics(grouped_data, filename)
+    # write_per_instance_statistics_to_file(grouped_data, filename)
+
+
 
 
     # wandb.init(project="metaga-summary", name='best-obj-summary')
