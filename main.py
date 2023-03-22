@@ -15,6 +15,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description=None)
     parser.add_argument('-i', '--inst', dest='instance', type=str, required=True, help='filepath to problem instance')
     parser.add_argument('-k', '--k-depots', dest='k_depots', type=str, required=True, help='k num tours determined by the depots. ex: -k 0,0')
+    parser.add_argument('-d', '--inverse-deployment', dest='inverse_deployment', type=bool, required=False, default=False, help='deploys the vehicles from the last vertex id minus the deployment id specified by -k. Ex n=30 -k 1,2 deploys at vertex ids 28,27')
+
     # parser.add_argument('-d', '--depots', dest='depots', type=str, required=True, help='the deployment configuration (single, multi). ex: -d single')
     parser.add_argument('-s', '--seeds', dest='seeds', type=str, required=True, help='random seeds to run the ga. ex: -s 1234,3949')
     parser.add_argument('-j', '--heuristics', dest='heuristics', type=str, default='MMMR', required=False, help='the set of heuristics (MMMR, RR). ex: -j MMMR')
@@ -43,6 +45,11 @@ def main():
 
     # create the graph
     gph = Graph(args.instance)
+
+    # inverse deployment if specified
+    if args.inverse_deployment:
+        for i in range(len(args.k_depots)):
+            args.k_depots[i] = gph.size_v() - 1 - args.k_depots[i]
 
     # create a router for constructing tours
     router = Router(gph, args.k_depots, args.heuristics)
