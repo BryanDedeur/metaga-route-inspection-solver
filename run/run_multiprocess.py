@@ -46,7 +46,9 @@ if __name__ == '__main__':
     seeds = "8115,3520,8647,9420,3116,6377,6207,4187,3641,8591,3580,8524,2650,2811,9963,7537,3472,3714,8158,7284,6948,6119,5253,5134,7350,2652,9968,3914,6899,4715"
 
     # depot configurations / k-values
-    k_depots = [[0,0],[0,0,0,0],[0,0,0,0,0,0,0,0]]
+    #k_depots = [[0,0],[0,0,0,0],[0,0,0,0,0,0,0,0]]
+    k_depots = [[0,1],[0,1,2,3],[0,1,2,3,0,1,2,3]]
+
 
     # heuristics
     heuristics = ['MMMR']
@@ -65,7 +67,7 @@ if __name__ == '__main__':
             if '.obj' in instance:
                 continue
             for heuristic in heuristics:
-                arguments = "-i " + instance + " -k " + depots + " -s " + seeds + " -j " + heuristic + " --silent"
+                arguments = "-i " + instance + " -k " + depots + " -s " + seeds + " -d True " + " -j " + heuristic + " --silent"
                 pool.apply_async(run_exe, (arguments,))
 
     # close the pool to prevent any more tasks from being added

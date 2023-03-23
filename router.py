@@ -40,10 +40,23 @@ class Router:
 		self.visitedEdges = []
 		self.unvisitedEdges = []
 
+		depot_group = 'zeros'
+		for depot in self.depots:
+			if depot != 0:
+				depot_group = 'single'
+
+		for i in range(len(self.depots)):
+			for j in range(len(self.depots)):
+				if i != j:
+					if self.depots[i] != self.depots[j]:
+						depot_group = 'multi'
+
+
 		self.config = {
 			'num_tours' : len(self.tours),
 			'depots' : self.depots,
-			'heuristic_group' : self.heuristics_group
+			'heuristic_group' : self.heuristics_group,
+			'depot_group' : depot_group
 		}
 	
 	def get_route(self):
