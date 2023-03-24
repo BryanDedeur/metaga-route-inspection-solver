@@ -4,8 +4,8 @@ import time
 import wandb
 import os
 
-class MetaGA:
-    def __init__(self, gene_len : int, chrom_len : int, eval_function, log_data_function):
+class DEGA:
+    def __init__(self, chrom_len : int, eval_function, log_data_function):
         # Define the print function
         if os.getenv('SILENT_MODE') == '1':
             def print_silent(*args, **kwargs):
@@ -15,7 +15,6 @@ class MetaGA:
             self.print = print
 
         self.ga_instance = None
-        self.gene_len = gene_len
         self.chrom_len = chrom_len
 
         self.log_data_function = log_data_function
@@ -98,25 +97,25 @@ class MetaGA:
 
         # create the pygad ga
         self.ga_instance = pygad.GA(
-            num_generations=150,
-
-            num_parents_mating=100, # num parents for mating
+            num_generations=1000, # GOOD
+            num_parents_mating=1000, # num parents for mating
             fitness_func=self.fitness_function,
-            sol_per_pop=100, # population size including parents and children
+            sol_per_pop=1000, # population size including parents and children
             parent_selection_type='rank',
             # K_tournament=50, # no effect unless using k_tournament
             # keep_parents=100, # double check this one (no effect if keep_elitism = 0)
-            keep_elitism=50,
-            crossover_type='two_points',
-            crossover_probability=0.99,
-            mutation_type='inversion',
-            mutation_probability=0.1,
+            keep_elitism=500,
+            crossover_type='uniform', 
+            crossover_probability=0.99, # GOOD
+            mutation_type='inversion', # GOOD
+            mutation_probability=0.4, # GOOD
             num_genes=self.chrom_len,
             init_range_low=0,
-            init_range_high=2,
+            init_range_high=self.chrom_len,
             gene_type=int,
             random_seed=seed,
             save_best_solutions=False,
+            allow_duplicate_genes=False,
 
             on_start=on_start,
             on_fitness=on_fitness,

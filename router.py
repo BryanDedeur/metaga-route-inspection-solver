@@ -9,26 +9,13 @@ from matplotlib.lines import Line2D
 
 
 class Router:
-	def __init__(self, gph, depots, heuristics_group):
+	def __init__(self, gph, depots):
 		self.graph = gph
 		self.tours = []
 		self.nearestEdgesSetSize = self.graph.size_e()
 		self.seed = 0
 		self.depots = depots
-		self.heuristics_group = heuristics_group
-		self.heuristics = []
-		if self.heuristics_group == 'MMMR':
-			gene_len = 2 # for 4 total heuristics
-			self.heuristics = [            
-				self.add_edges_to_shortest_tour_with_min_cost_edge_from_nearest_unvisited_equidistant, # min cost
-				self.add_edges_to_shortest_tour_with_median_cost_edge_from_nearest_unvisited_equidistant, # median cost 
-				self.add_edges_to_shortest_tour_with_max_cost_edge_from_nearest_unvisited_equidistant, # max cost
-				self.add_edges_to_shortest_tour_with_random_cost_edge_from_nearest_unvisited_equidistant # random cost 
-			]
-		elif self.heuristics_group == 'RR':
-			gene_len = len(bin(gph.maxVertexDegree)[2:]) # the binary representation of max vertex degree
-			for i in range(pow(2,gene_len)): 
-				self.heuristics.append(self.add_edges_to_shortest_tour_with_round_robin_nearest_unvisited_equidistant)
+		self.heuristics_group = 'DEGA'
 
 		for i in range(len(depots)):
 			self.tours.append(tour.Tour(self.graph))
@@ -50,7 +37,6 @@ class Router:
 				if i != j:
 					if self.depots[i] != self.depots[j]:
 						depot_group = 'multi'
-
 
 		self.config = {
 			'num_tours' : len(self.tours),
