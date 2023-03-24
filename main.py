@@ -56,7 +56,7 @@ def main():
     chrom_len = gph.size_e() + len(router.tours)
 
     # define the fitness function
-    def evaluate(ga, chromosome, individual_id):  
+    def evaluate(ga, chromosome):  
         router.clear()
 
         # add first vertex to tour
@@ -73,26 +73,27 @@ def main():
                 # an edge
                 if current_tour_id > -1:
                     router.tours[current_tour_id].add_edge(h)
-                    router.unvisitedEdges.remove(h)
-                    router.visitedEdges.append(h)
 
         # finish the tour that was partially read
         for h in chromosome:
             if h < gph.size_e():
                 router.tours[current_tour_id].add_edge(h)
-                router.unvisitedEdges.remove(h)
-                router.visitedEdges.append(h)
             else:
                 break
 
-        if len(router.unvisitedEdges) > 0:
+        # check if all edges were visited
+        unvisited_edges = [i for i in range(gph.size_e())]
+        for tour in router.tours:
+            for edge in tour.edgeSequence:
+                if edge in unvisited_edges:
+                    unvisited_edges.remove(edge)
+
+        if len(unvisited_edges) > 0:
             print("ERROR: not all edges were visited")
 
         # return all tours to their depots
         for tour in router.tours:
             tour.add_vertex(tour.depot)
-
-        
 
         # compute objective
         objective = router.get_length_of_longest_tour()
