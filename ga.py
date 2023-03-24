@@ -48,7 +48,7 @@ class DEGA:
         def on_start(ga_instance):
             self.gen_start_time = time.time()
             self.run_start_time = time.time()
-            self.print(str(self.run_count) + '. MetaGA run (seed:'+ str(ga_instance.random_seed) +'): [', end = '')
+            self.print(str(self.run_count) + '. DEGA run (seed:'+ str(ga_instance.random_seed) +'): [', end = '')
 
         def on_fitness(ga_instance, population_fitness):
 
@@ -99,7 +99,7 @@ class DEGA:
         # create the pygad ga
         self.ga_instance = GeneticAlgorithm(
             num_generations=1000, # GOOD
-            num_parents_mating=100, # num parents for mating
+            num_parents_mating=1000, # num parents for mating
             fitness_func=self.fitness_function,
             parent_selection_type='chc',
             crossover_type='ordererd', 
@@ -132,7 +132,7 @@ class DEGA:
             'crossover_probability' : self.ga_instance.crossover_probability,
             'mutation_type' : self.ga_instance.mutation_type,
             'mutation_probability' : self.ga_instance.mutation_probability,
-            'num_genes' : self.ga_instance.num_genes,
+            'num_genes' : self.ga_instance.gene_length,
             'random_seed' : self.ga_instance.random_seed,
         }
 
@@ -161,7 +161,6 @@ class GeneticAlgorithm:
         # self.gene_pool = kwargs.get('init_range_high', None)
         self.gene_length = kwargs.get('num_genes', 0)
         self.gene_pool = list(range(self.gene_length))
-        self.num_genes = kwargs.get('num_genes', 0)
         self.parent_selection_type = kwargs.get('parent_selection_type', 'sss')
         self.crossover_type = kwargs.get('crossover_type', 'single_point')
         self.crossover_probability = kwargs.get('crossover_probability', 0.9)
@@ -170,6 +169,7 @@ class GeneticAlgorithm:
         self.random_seed = kwargs.get('random_seed', None)
         self.generations_completed = 0
         random.seed(self.random_seed)
+        numpy.random.seed(self.random_seed)
 
         self.on_start = kwargs.get('on_start', None)
         self.on_fitness = kwargs.get('on_fitness', None)
@@ -180,7 +180,7 @@ class GeneticAlgorithm:
         self.on_stop = kwargs.get('on_stop', None)
 
     def init_population(self):
-        return [list(numpy.random.permutation(self.gene_pool)[:self.num_genes]) for _ in range(self.pop_size)]
+        return [list(numpy.random.permutation(self.gene_pool)[:self.gene_length]) for _ in range(self.pop_size)]
 
     def evaluate_population(self, population):
         pop_fitness = [(individual, self.fitness_fn(individual)) for individual in population]
@@ -200,27 +200,46 @@ class GeneticAlgorithm:
             # If crossover probability is not met, return a copy of parent1
             return parent1[:]
 
-        start = random.randint(0, self.num_genes-1)
-        end = random.randint(start, self.num_genes-1)
+        start = random.randint(0, self.gene_length-1)
+        end = random.randint(start, self.gene_length-1)
         child = parent2[:]
-        child[start:end+1] = [gene for gene in parent1[start:end+1] if gene not in child[start:end+1]]
-        # Remove duplicates from child sequence
-        child_set = set()
-        child = [gene if gene not in child_set and not child_set.add(gene) else self.gene_pool[random.randint(0, len(self.gene_pool) - 1)]
-                 for gene in child]
+
+        # replace genes in child with subset from parent1
+        new_genes = set(parent1[start:end + 1])
+        replaced_genes = set(child[i] for i in range(start,end + 1))
+        child[start:end+1] = parent1[start:end+1]
+
+        # remove duplicates from replicated genes
+        replaced_genes -= new_genes
+
+        # remove duplicates from child sequence
+        new_gene_indices = set(range(start, end+1))
+        indices_to_replace = set(i for i, gene in enumerate(child) if gene in new_genes and i not in new_gene_indices)
+        replacement_genes = iter(replaced_genes)
+        child[:] = [gene if i not in indices_to_replace else next(replacement_genes) for i, gene in enumerate(child)]
+
+        # check for duplicates in child sequence
+        # gene_dictionary = {}
+        # for gene in child:
+        #     if gene in gene_dictionary:
+        #         gene_dictionary[gene] += 1
+        #         print("Duplicates found")
+        #     else:
+        #         gene_dictionary[gene] = 1
+
         return child
 
     def cataclysmic_mutation(self, individual):
         if random.random() < self.mutation_probability:
             # Choose a random substring to invert
-            start_index = random.randint(0, self.num_genes - 1)
-            end_index = random.randint(start_index, self.num_genes - 1)
+            start_index = random.randint(0, self.gene_length - 1)
+            end_index = random.randint(start_index, self.gene_length - 1)
             # Invert the order of the substring
             individual[start_index:end_index+1] = individual[start_index:end_index+1][::-1]
-        # Remove duplicates from individual sequence
-        individual_set = set()
-        individual = [gene if gene not in individual_set and not individual_set.add(gene) else self.gene_pool[random.randint(0, len(self.gene_pool) - 1)]
-                      for gene in individual]
+        # # Remove duplicates from individual sequence
+        # individual_set = set()
+        # individual = [gene if gene not in individual_set and not individual_set.add(gene) else self.gene_pool[random.randint(0, len(self.gene_pool) - 1)]
+        #               for gene in individual]
         return individual
 
     def evolve_population(self, parents):
