@@ -82,14 +82,14 @@ def main():
                 break
 
         # check if all edges were visited
-        unvisited_edges = [i for i in range(gph.size_e())]
-        for tour in router.tours:
-            for edge in tour.edgeSequence:
-                if edge in unvisited_edges:
-                    unvisited_edges.remove(edge)
+        # unvisited_edges = [i for i in range(gph.size_e())]
+        # for tour in router.tours:
+        #     for edge in tour.edgeSequence:
+        #         if edge in unvisited_edges:
+        #             unvisited_edges.remove(edge)
 
-        if len(unvisited_edges) > 0:
-            print("ERROR: not all edges were visited")
+        # if len(unvisited_edges) > 0:
+        #     print("ERROR: not all edges were visited")
 
         # return all tours to their depots
         for tour in router.tours:

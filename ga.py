@@ -82,7 +82,7 @@ class DEGA:
             self.log_data_function(self)
 
 
-        def on_stop(ga_instance, last_population_fitness):
+        def on_stop(ga_instance):
             self.run_time_seconds = time.time() - self.run_time_start
             self.print('] in ' + str(round(self.run_time_seconds, 3)) + 's')
             self.log_data = {}
@@ -257,6 +257,7 @@ class GeneticAlgorithm:
     def run(self):
         self.on_start(self)
         population = self.init_population()
+        last_fitness = []
         for i in range(self.num_generations):
             population = self.evaluate_population(population)
             # print(f"Generation {i+1}: Best fitness - {population[0][1]}")
