@@ -318,28 +318,179 @@ def write_per_kvalue_per_instance_objective_percent_improvement(grouped_data, fi
                         output += ','
                 f.write(output + '\n') 
 
+def filter_dataframe(df, filter_func):
+    """
+    Filters a dataframe based on a given lambda function.
+
+    Parameters:
+    df (pandas.DataFrame): The input dataframe to filter.
+    filter_func (function): A lambda function that takes a row of the dataframe as input and returns a boolean value.
+
+    Returns:
+    pandas.DataFrame: A subset dataframe containing only the rows where filter_func returns True.
+    """
+    mask = df.apply(filter_func, axis=1)
+    return df.loc[mask, :]
+
+def group_data(df, keywords):
+    grouped_dict = {}
+
+    for index, row in df.iterrows():
+        key = grouped_dict
+        for keyword in keywords:
+            keys = keyword.split('.')
+            value = row
+            for k in keys:
+                value = value.get(k, None)
+                if value is None:
+                    break
+            if value is not None:
+                if value not in key:
+                    key[value] = {}
+                key = key[value]
+
+    return grouped_dict
+
+def write_analyzed_data(dataframe, instance, filename):
+    sub_dataframe = filter_dataframe(dataframe, 
+        lambda x: 'routing' in x['config'] and (
+        instance in x['config']['instance']['name']
+    ))
+
+    # Build a grouped dictionary by instance name and depot group
+    grouped = {}
+
+    for index, row in sub_dataframe.iterrows():
+        instance_name = row['config']['instance']['name']
+        depot_group = row['config']['routing']['depot_group']
+        if instance_name not in grouped:
+            grouped[instance_name] = {}
+        if depot_group not in grouped[instance_name]:
+            grouped[instance_name][depot_group] = {'best obj' : float('inf'), 'avg best obj' : [], 'avg time till best(s)': []}
+        if row['summary']['run best obj'] < grouped[instance_name][depot_group]['best obj']:
+            grouped[instance_name][depot_group]['best obj'] = row['summary']['run best obj']
+        grouped[instance_name][depot_group]['avg best obj'].append(row['summary']['run best obj'])
+        grouped[instance_name][depot_group]['avg time till best(s)'].append(row['summary']['run best time(s)'])
+
+    for key_1, row_1 in grouped.items():
+        for key_2, row_2 in row_1.items():
+            grouped[key_1][key_2]['avg best obj'] = numpy.min(grouped[key_1][key_2]['avg best obj'])
+            grouped[key_1][key_2]['avg time till best(s)'] = numpy.min(grouped[key_1][key_2]['avg time till best(s)'])
+
+    # Build table
+    headers = ['Instance', 'Single Depot Best Obj', 'Multi Depot Best Obj', 'Avg Best Obj Improvement', 'Avg Time Till Best Obj Improvement(s)']
+    rows = [instance + '1', instance + '2', instance + '3', instance + '4', instance + '5']
+    table = []
+    table.append(headers)
+    for i in range(len(rows)):
+        table.append([])
+        table[i+1].append(rows[i])
+        table[i+1].append(grouped[rows[i]]['single']['best obj'])
+        table[i+1].append(grouped[rows[i]]['multi']['best obj'])
+        table[i+1].append((grouped[rows[i]]['single']['avg best obj'] - grouped[rows[i]]['multi']['avg best obj']) / grouped[rows[i]]['multi']['avg best obj'])
+        table[i+1].append((grouped[rows[i]]['single']['avg time till best(s)'] - grouped[rows[i]]['multi']['avg time till best(s)']) / grouped[rows[i]]['multi']['avg time till best(s)'])
+
+    # Open a new CSV file in write mode
+    with open(filename, 'a', newline='') as csvfile:
+        # Create a CSV writer object
+        writer = csv.writer(csvfile)
+        
+        # Write each row of data to the CSV file
+        for row in table:
+            writer.writerow(row)
+
 def main():
     # get_data_from_wandb_api()
 
     args = parse_args()
-    df = pandas.read_csv(args.data_file)
+    df = pandas.read_csv(args.data_file, header=0, index_col=0)
 
-    # drop duplicates based on these columns
-    df = df.drop_duplicates(subset=['routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed'])
+    # Define a lambda function to extract the run data, configuration data, and run name
+    extract_data = lambda x: (eval(x['summary']), eval(x['config']), x['name'])
+
+    # Apply the lambda function to each row in the dataframe and store the results in separate columns
+    df[['summary', 'config', 'name']] = df.apply(extract_data, axis=1, result_type='expand')
+
+    # # drop duplicates based on these columns
+    # df = df.drop_duplicates(subset=['routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed'])
+
 
     # Remove state == killed or state == crashed
-    df = df[df['State'] == 'finished']
+    # df = df[df['State'] == 'finished']
         
     # Group the data and track if known
-    grouped_data = group_data_by_columns(df, 'routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed')
+    # grouped_data = group_data_by_columns(df, 'routing.depot_group', 'routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed')
+
+    # # Add avg best obj and avg best time to grouped data
+    # grouped_data = add_avg_best_obj_and_avg_time_to_reach_best(grouped_data)
 
     # Clears the results file
     filename = 'results.csv'
     with open(filename, 'w') as f:
         pass
 
-    # For comparing all heuristic groups to eachother without statistical tests
-    write_per_kvalue_per_instance_objective_percent_improvement(grouped_data, filename)
+    # --------------------------------------------------------------------
+    # Section 2: 1 Depot vs Multi Depot
+    # --------------------------------------------------------------------
+
+    subset_df = filter_dataframe(df, lambda x: 'routing' in x['config'] and (
+        x['config']['routing'].get('depot_group') == 'single' or 
+        x['config']['routing'].get('depot_group') == 'multi'
+    ))
+
+    # --------------------------------------------------------------------
+    # Subsection 2.1: MetaGA 1 Depot vs MetaGA Multi Depot
+    # --------------------------------------------------------------------
+
+    metaga_single_metaga_multi_df = filter_dataframe(subset_df, lambda x: 'routing' in x['config'] and (
+        x['config']['routing']['heuristic_group'] == 'MMMR'
+    ))
+
+    # --------------------------------------------------------------------
+    # Subsubsection 2.1.1: k=2
+    # --------------------------------------------------------------------
+
+    k2_metaga_single_metaga_multi_df = filter_dataframe(metaga_single_metaga_multi_df, lambda x: 'routing' in x['config'] and (
+        x['config']['routing']['num_tours'] == 2
+    ))
+
+    # pratt
+    write_analyzed_data(k2_metaga_single_metaga_multi_df, 'pratt', filename)
+
+    # howe
+    write_analyzed_data(k2_metaga_single_metaga_multi_df, 'howe', filename)
+
+    # warren
+    write_analyzed_data(k2_metaga_single_metaga_multi_df, 'warren', filename)
+
+    # ktruss
+    write_analyzed_data(k2_metaga_single_metaga_multi_df, 'ktruss', filename)
+
+    # Subsubsection 2.1.1: k=4
+
+    # pratt
+
+    # howe
+
+    # warren
+
+    # ktruss
+
+    # Subsubsection 2.1.1: k=8
+
+    # pratt
+
+    # howe
+
+    # warren
+
+    # ktruss
+
+    # Subsection 2.2: MetaGA Multi Depot vs DEGA Multi Depot
+
+
+    # # For comparing all heuristic groups to eachother without statistical tests
+    # write_per_kvalue_per_instance_objective_percent_improvement(grouped_data, filename)
     
     # # Remove unbalanced runs
     # grouped_data = exclude_unbalanced_runs(grouped_data)
