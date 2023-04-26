@@ -439,8 +439,7 @@ def main():
     # ))
     
     subset_df = filter_dataframe(df, lambda x: 'routing' in x['config'] and (
-        x['config']['routing'].get('depot_group') != 'single' and 
-        x['config']['routing'].get('depot_group') != 'multi'
+        x['config']['routing'].get('depot_group') == None
     ))
 
     # --------------------------------------------------------------------
