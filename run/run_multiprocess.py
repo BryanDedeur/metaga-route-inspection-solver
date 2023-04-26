@@ -46,32 +46,31 @@ if __name__ == '__main__':
     seeds = "8115,3520,8647,9420,3116,6377,6207,4187,3641,8591,3580,8524,2650,2811,9963,7537,3472,3714,8158,7284,6948,6119,5253,5134,7350,2652,9968,3914,6899,4715"
 
     # depot configurations / k-values
-    #k_depots = [[0,0],[0,0,0,0],[0,0,0,0,0,0,0,0]]
+    # k_depots = [[0,0],[0,0,0,0],[0,0,0,0,0,0,0,0]]
     k_depots = [[0,1],[0,1,2,3],[0,1,2,3,0,1,2,3]]
+    # k_depots = [[0,0,0,0]]
 
+    inverse_depots = ' -d True'
+    # inverse_depots = ''
 
-    # heuristics
-    heuristics = ['MMMR']
-
-    print("Running " + str(len(instances) * len(k_depots) * len(heuristics)) + " different configurations.")
+    print("Running " + str(len(instances) * len(k_depots) * len(seeds.split(","))) + " different configurations.")
 
     # create a Pool object with the number of available processors
     pool = multiprocessing.Pool(processes=num_cores)
 
-    for k in k_depots:
-        depots = ""
-        for d in k:
-            depots += str(d) + ","
-        depots = depots[:-1]
-        for instance in instances:
-            if '.obj' in instance:
-                continue
-            for heuristic in heuristics:
-                arguments = "-i " + instance + " -k " + depots + " -s " + seeds + " -d True " + " -j " + heuristic + " --silent"
-                pool.apply_async(run_exe, (arguments,))
+    seeds_list = seeds.split(",")
+    for seed in seeds_list:
+        for k in k_depots:
+            depots = ""
+            for d in k:
+                depots += str(d) + ","
+            depots = depots[:-1]
+            for instance in instances:
+                if '.obj' in instance:
+                    continue
+                arguments = "-i " + instance + " -k " + depots + " -s " + seed + inverse_depots + " --silent"
+                processes.append(pool.apply_async(run_exe, (arguments,)))
 
     # close the pool to prevent any more tasks from being added
     pool.close()
-
-    # wait for all the processes to finish
     pool.join()
