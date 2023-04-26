@@ -454,22 +454,35 @@ def main():
             x['config']['routing']['heuristic_group'] == h_group
         ))
 
-    instance_names = ['gdb1']
-    k_values = [2,4,8]
-    for k_value in k_values:
+    # Clears the results file
+    filename = 'results.csv'
+    with open(filename, 'a') as f:
+        instance_names = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']
+        k_values = [2,4,8]
         for instance in instance_names:
-            compare_set_df = {}
-            for h_group in heuristic_groups:
-                temp = filter_dataframe(sub_subset_dfs[h_group], lambda x: 'routing' in x['config'] and (
-                    x['config']['routing']['num_tours'] == k_value and
-                    x['config']['instance']['name'] == instance
-                ))
-                compare_set_df[h_group] = []
-                for run in temp.values:
-                    compare_set_df[h_group].append(run[0]['run best obj'])
-            print(0)
+            f.write(instance + ',')
+            for k_value in k_values:
+                compare_set_df = {}
+                for h_group in heuristic_groups:
+                    temp = filter_dataframe(sub_subset_dfs[h_group], lambda x: 'routing' in x['config'] and (
+                        x['config']['routing']['num_tours'] == k_value and
+                        x['config']['instance']['name'] == instance
+                    ))
+                    compare_set_df[h_group] = []
+                    for run in temp.values:
+                        compare_set_df[h_group].append(run[0]['run best obj'])
+                if len(compare_set_df[heuristic_groups[0]]) != len(compare_set_df[heuristic_groups[1]]):
+                    print("Cannot compare: " + "k=" + str(k_value) + " instance=" + instance)
+                    f.write('NA,NA,')
+                    continue
+                
+                t_statistic, p_value = mannwhitneyu(compare_set_df[heuristic_groups[0]], compare_set_df[heuristic_groups[1]])
+                sig_diff = p_value > 0.05
+                print("k=" + str(k_value) + " instance=" + instance + " sig_diff=" + str(sig_diff))
+                f.write(str(p_value) + ',' +str(sig_diff) +',')
+            f.write('\n')
 
-
+    print()
 
     # instance_k2_metaga_sub_subset_df = filter_dataframe(k2_metaga_sub_subset_df, lambda x: 'routing' in x['config'] and (
     #     x['config']['instance']['name'] == "gdb1"
@@ -479,9 +492,9 @@ def main():
     # Subsubsection 2.1.1: k=2
     # --------------------------------------------------------------------
 
-    k2_metaga_single_metaga_multi_df = filter_dataframe(metaga_single_metaga_multi_df, lambda x: 'routing' in x['config'] and (
-        x['config']['routing']['num_tours'] == 2
-    ))
+    # k2_metaga_single_metaga_multi_df = filter_dataframe(metaga_single_metaga_multi_df, lambda x: 'routing' in x['config'] and (
+    #     x['config']['routing']['num_tours'] == 2
+    # ))
 
     # # pratt
     # write_analyzed_data(k2_metaga_single_metaga_multi_df, 'pratt', filename)
