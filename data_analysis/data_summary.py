@@ -433,9 +433,14 @@ def main():
     # Section 2: 1 Depot vs Multi Depot
     # --------------------------------------------------------------------
 
+    # subset_df = filter_dataframe(df, lambda x: 'routing' in x['config'] and (
+    #     x['config']['routing'].get('depot_group') == 'single' or 
+    #     x['config']['routing'].get('depot_group') == 'multi'
+    # ))
+    
     subset_df = filter_dataframe(df, lambda x: 'routing' in x['config'] and (
-        x['config']['routing'].get('depot_group') == 'single' or 
-        x['config']['routing'].get('depot_group') == 'multi'
+        x['config']['routing'].get('depot_group') != 'single' and 
+        x['config']['routing'].get('depot_group') != 'multi'
     ))
 
     # --------------------------------------------------------------------
