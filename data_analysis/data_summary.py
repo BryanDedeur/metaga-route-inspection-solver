@@ -446,22 +446,34 @@ def main():
     # Subsection 2.1: MetaGA 1 Depot vs MetaGA Multi Depot
     # --------------------------------------------------------------------
 
-    heuristic_groups = 
+    heuristic_groups = ['MMMR', 'DEGA']
 
-    metaga_sub_subset_df = filter_dataframe(subset_df, lambda x: 'routing' in x['config'] and (
-        x['config']['routing']['heuristic_group'] == 'MMMR'
-    ))
-    metaga_sub_subset_df = filter_dataframe(subset_df, lambda x: 'routing' in x['config'] and (
-        x['config']['routing']['heuristic_group'] == 'DEGA'
-    ))
+    sub_subset_dfs = {}
+    for h_group in heuristic_groups:
+        sub_subset_dfs[h_group] = filter_dataframe(subset_df, lambda x: 'routing' in x['config'] and (
+            x['config']['routing']['heuristic_group'] == h_group
+        ))
 
-    k2_metaga_sub_subset_df = filter_dataframe(metaga_sub_subset_df, lambda x: 'routing' in x['config'] and (
-        x['config']['routing']['num_tours'] == 2
-    ))
+    instance_names = ['gdb1']
+    k_values = [2,4,8]
+    for k_value in k_values:
+        for instance in instance_names:
+            compare_set_df = {}
+            for h_group in heuristic_groups:
+                temp = filter_dataframe(sub_subset_dfs[h_group], lambda x: 'routing' in x['config'] and (
+                    x['config']['routing']['num_tours'] == k_value and
+                    x['config']['instance']['name'] == instance
+                ))
+                compare_set_df[h_group] = []
+                for run in temp.values:
+                    compare_set_df[h_group].append(run[0]['run best obj'])
+            print(0)
 
-    instance_k2_metaga_sub_subset_df = filter_dataframe(k2_metaga_sub_subset_df, lambda x: 'routing' in x['config'] and (
-        x['config']['instance']['name'] == "gdb1"
-    ))
+
+
+    # instance_k2_metaga_sub_subset_df = filter_dataframe(k2_metaga_sub_subset_df, lambda x: 'routing' in x['config'] and (
+    #     x['config']['instance']['name'] == "gdb1"
+    # ))
 
     # --------------------------------------------------------------------
     # Subsubsection 2.1.1: k=2
