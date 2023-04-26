@@ -446,8 +446,21 @@ def main():
     # Subsection 2.1: MetaGA 1 Depot vs MetaGA Multi Depot
     # --------------------------------------------------------------------
 
-    metaga_single_metaga_multi_df = filter_dataframe(subset_df, lambda x: 'routing' in x['config'] and (
+    heuristic_groups = 
+
+    metaga_sub_subset_df = filter_dataframe(subset_df, lambda x: 'routing' in x['config'] and (
         x['config']['routing']['heuristic_group'] == 'MMMR'
+    ))
+    metaga_sub_subset_df = filter_dataframe(subset_df, lambda x: 'routing' in x['config'] and (
+        x['config']['routing']['heuristic_group'] == 'DEGA'
+    ))
+
+    k2_metaga_sub_subset_df = filter_dataframe(metaga_sub_subset_df, lambda x: 'routing' in x['config'] and (
+        x['config']['routing']['num_tours'] == 2
+    ))
+
+    instance_k2_metaga_sub_subset_df = filter_dataframe(k2_metaga_sub_subset_df, lambda x: 'routing' in x['config'] and (
+        x['config']['instance']['name'] == "gdb1"
     ))
 
     # --------------------------------------------------------------------
@@ -458,17 +471,17 @@ def main():
         x['config']['routing']['num_tours'] == 2
     ))
 
-    # pratt
-    write_analyzed_data(k2_metaga_single_metaga_multi_df, 'pratt', filename)
+    # # pratt
+    # write_analyzed_data(k2_metaga_single_metaga_multi_df, 'pratt', filename)
 
-    # howe
-    write_analyzed_data(k2_metaga_single_metaga_multi_df, 'howe', filename)
+    # # howe
+    # write_analyzed_data(k2_metaga_single_metaga_multi_df, 'howe', filename)
 
-    # warren
-    write_analyzed_data(k2_metaga_single_metaga_multi_df, 'warren', filename)
+    # # warren
+    # write_analyzed_data(k2_metaga_single_metaga_multi_df, 'warren', filename)
 
-    # ktruss
-    write_analyzed_data(k2_metaga_single_metaga_multi_df, 'ktruss', filename)
+    # # ktruss
+    # write_analyzed_data(k2_metaga_single_metaga_multi_df, 'ktruss', filename)
 
     # Subsubsection 2.1.1: k=4
 
