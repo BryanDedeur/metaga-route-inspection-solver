@@ -1,4 +1,4 @@
-Problem,Edges,k,best,Ave Best,Ave Seed Time (s),Ave Num Evals
+Instance,Edges,k,best,Ave Best,Ave Seed Time (s),Ave Num Evals
 gdb1,22.00,1.00,294.00,294.00,5.60,2.37
 gdb1,22.00,2.00,147.00,147.00,5.93,304.83
 gdb1,22.00,4.00,76.00,76.00,6.63,3044.27
