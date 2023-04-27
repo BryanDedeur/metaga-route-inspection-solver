@@ -417,113 +417,213 @@ def main():
     with open(filename, 'w') as f:
         pass
 
-    # Compare metaga with ahr
     filename = 'stat_results.csv'
     with open(filename, 'a') as f:
-        instances = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']    
+        instances = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']   
         k_values = [2,4,8]
-        for k_value in k_values:
-            compare_list = {}
-            compare_list['AHR'] = []
-            compare_list['META'] = []
-
-            for instance in instances:
+        for instance in instances:
+            f.write(instance + ',')
+            for k_value in k_values:
                 for row in metaga_df.iterrows():
                     if row[0] == instance and row[1]['k'] == k_value:
-                        compare_list['META'].append(row[1]['best'])
+                        f.write(str(round(row[1]['best'], 3)) + ',')
                         break
-                for row in ahr_df.iterrows():
-                    if row[0] == instance and row[1]['k'] == k_value:
-                        compare_list['AHR'].append(row[1]['TInf'])
-                        break
+            f.write('\n')
+
+    # # Compare metaga with ahr
+    # filename = 'stat_results.csv'
+    # with open(filename, 'a') as f:
+    #     instances = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']    
+    #     k_values = [2,4,8]
+    #     for k_value in k_values:
+    #         compare_list = {}
+    #         compare_list['AHR'] = []
+    #         compare_list['META'] = []
+
+    #         for instance in instances:
+    #             for row in metaga_df.iterrows():
+    #                 if row[0] == instance and row[1]['k'] == k_value:
+    #                     compare_list['META'].append(row[1]['best'])
+    #                     break
+    #             for row in ahr_df.iterrows():
+    #                 if row[0] == instance and row[1]['k'] == k_value:
+    #                     compare_list['AHR'].append(row[1]['TInf'])
+    #                     break
             
-            f.write(str(k_value) + ',')
+    #         f.write(str(k_value) + ',')
 
-            t_statistic, p_value = mannwhitneyu(compare_list['AHR'], compare_list['META'])
-            f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+',')
+    #         t_statistic, p_value = mannwhitneyu(compare_list['AHR'], compare_list['META'])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+',')
 
-            # print('Mannwhitneyu: ' + str(p_value) + ' ' +str(p_value > 0.05))
+    #         # print('Mannwhitneyu: ' + str(p_value) + ' ' +str(p_value > 0.05))
 
-            t_statistic, p_value = ranksums(compare_list['AHR'], compare_list['META'])
-            f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+',')
+    #         t_statistic, p_value = ranksums(compare_list['AHR'], compare_list['META'])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+',')
 
-            # print('Wilcoxon: ' + str(p_value) + ' ' +str(p_value > 0.05))
+    #         # print('Wilcoxon: ' + str(p_value) + ' ' +str(p_value > 0.05))
 
-            t_statistic, p_value = ttest_rel(compare_list['AHR'], compare_list['META'])
-            f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+'\n')
+    #         t_statistic, p_value = ttest_rel(compare_list['AHR'], compare_list['META'])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+'\n')
 
-        # Compare metaga with ahr
+    #     # Compare metaga with ahr
+    # filename = 'stat_results.csv'
+    # with open(filename, 'a') as f:
+    #     instances = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']    
+    #     k_values = [2,4,8]
+    #     for k_value in k_values:
+    #         compare_list = {}
+    #         other_method = 'DEGA'
+    #         compare_list[other_method] = []
+    #         compare_list['META'] = []
+
+    #         for instance in instances:
+    #             for row in metaga_df.iterrows():
+    #                 if row[0] == instance and row[1]['k'] == k_value:
+    #                     compare_list['META'].append(row[1]['best'])
+    #                     break
+    #             for row in dega_df.iterrows():
+    #                 if row[1]['Problem Instance'] == instance and row[1]['k'] == k_value:
+    #                     compare_list[other_method].append(row[1]['Best Longest Route'])
+    #                     break
+            
+    #         f.write(str(k_value) + ',')
+
+    #         t_statistic, p_value = mannwhitneyu(compare_list['META'], compare_list[other_method])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value,3))+',')
+
+    #         # print('Mannwhitneyu: ' + str(p_value) + ' ' +str(p_value > 0.05))
+
+    #         t_statistic, p_value = ranksums(compare_list['META'], compare_list[other_method])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value,3))+',')
+
+    #         # print('Wilcoxon: ' + str(p_value) + ' ' +str(p_value > 0.05))
+
+    #         t_statistic, p_value = ttest_rel(compare_list['META'], compare_list[other_method])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+'\n')
+
+
+    #     # Compare metaga with ahr
+    # filename = 'stat_results.csv'
+    # with open(filename, 'a') as f:
+    #     instances = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']    
+    #     k_values = [1, 2,4,8]
+    #     for k_value in k_values:
+    #         compare_list = {}
+    #         other_method = 'MAX-LB'
+    #         compare_list[other_method] = []
+    #         compare_list['META'] = []
+
+    #         for instance in instances:
+    #             for row in metaga_df.iterrows():
+    #                 if row[0] == instance and row[1]['k'] == k_value:
+    #                     compare_list['META'].append(row[1]['best'])
+    #                     break
+    #             for row in max_lb_df.iterrows():
+    #                 if row[0] == instance:
+    #                     compare_list[other_method].append(row[1][k_value])
+    #                     break
+            
+    #         f.write(str(k_value) + ',')
+
+    #         t_statistic, p_value = mannwhitneyu(compare_list['META'], compare_list[other_method])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value,3))+',')
+
+    #         # print('Mannwhitneyu: ' + str(p_value) + ' ' +str(p_value > 0.05))
+
+    #         t_statistic, p_value = ranksums(compare_list['META'], compare_list[other_method])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value,3))+',')
+
+    #         # print('Wilcoxon: ' + str(p_value) + ' ' +str(p_value > 0.05))
+
+    #         t_statistic, p_value = ttest_rel(compare_list['META'], compare_list[other_method])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+'\n')
+
     filename = 'stat_results.csv'
     with open(filename, 'a') as f:
-        instances = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']    
+        instances = ['howe1','howe2','howe3','howe4','howe5','pratt1','pratt2','pratt3','pratt4','pratt5','ktruss1','ktruss2','ktruss3','ktruss4','ktruss5','warren1','warren2','warren3','warren4','warren5']    
         k_values = [2,4,8]
-        for k_value in k_values:
-            compare_list = {}
-            other_method = 'DEGA'
-            compare_list[other_method] = []
-            compare_list['META'] = []
-
-            for instance in instances:
+        for instance in instances:
+            f.write(instance + ',')
+            for k_value in k_values:
                 for row in metaga_df.iterrows():
                     if row[0] == instance and row[1]['k'] == k_value:
-                        compare_list['META'].append(row[1]['best'])
+                        f.write(str(round(row[1]['best'], 3)) + ',')
                         break
-                for row in dega_df.iterrows():
-                    if row[1]['Problem Instance'] == instance and row[1]['k'] == k_value:
-                        compare_list[other_method].append(row[1]['Best Longest Route'])
-                        break
-            
-            f.write(str(k_value) + ',')
+            f.write('\n')
 
-            t_statistic, p_value = mannwhitneyu(compare_list['META'], compare_list[other_method])
-            f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value,3))+',')
-
-            # print('Mannwhitneyu: ' + str(p_value) + ' ' +str(p_value > 0.05))
-
-            t_statistic, p_value = ranksums(compare_list['META'], compare_list[other_method])
-            f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value,3))+',')
-
-            # print('Wilcoxon: ' + str(p_value) + ' ' +str(p_value > 0.05))
-
-            t_statistic, p_value = ttest_rel(compare_list['META'], compare_list[other_method])
-            f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+'\n')
-
-
+    print()
         # Compare metaga with ahr
-    filename = 'stat_results.csv'
-    with open(filename, 'a') as f:
-        instances = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']    
-        k_values = [1, 2,4,8]
-        for k_value in k_values:
-            compare_list = {}
-            other_method = 'MAX-LB'
-            compare_list[other_method] = []
-            compare_list['META'] = []
+    # filename = 'stat_results.csv'
+    # with open(filename, 'a') as f:
+    #     instances = ['howe1','howe2','howe3','howe4','howe5','pratt1','pratt2','pratt3','pratt4','pratt5','ktruss1','ktruss2','ktruss3','ktruss4','ktruss5','warren1','warren2','warren3','warren4','warren5']    
+    #     k_values = [2,4,8]
+    #     for k_value in k_values:
+    #         compare_list = {}
+    #         other_method = 'DEGA'
+    #         compare_list[other_method] = []
+    #         compare_list['META'] = []
 
-            for instance in instances:
-                for row in metaga_df.iterrows():
-                    if row[0] == instance and row[1]['k'] == k_value:
-                        compare_list['META'].append(row[1]['best'])
-                        break
-                for row in max_lb_df.iterrows():
-                    if row[0] == instance:
-                        compare_list[other_method].append(row[1][k_value])
-                        break
+    #         for instance in instances:
+    #             for row in metaga_df.iterrows():
+    #                 if row[0] == instance and row[1]['k'] == k_value:
+    #                     compare_list['META'].append(row[1]['best'])
+    #                     break
+    #             for row in dega_df.iterrows():
+    #                 if row[1]['Problem Instance'] == instance and row[1]['k'] == k_value:
+    #                     compare_list[other_method].append(row[1]['Best Longest Route'])
+    #                     break
             
-            f.write(str(k_value) + ',')
+    #         f.write(str(k_value) + ',')
 
-            t_statistic, p_value = mannwhitneyu(compare_list['META'], compare_list[other_method])
-            f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value,3))+',')
+    #         t_statistic, p_value = mannwhitneyu(compare_list['META'], compare_list[other_method])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value,3))+',')
 
-            # print('Mannwhitneyu: ' + str(p_value) + ' ' +str(p_value > 0.05))
+    #         # print('Mannwhitneyu: ' + str(p_value) + ' ' +str(p_value > 0.05))
 
-            t_statistic, p_value = ranksums(compare_list['META'], compare_list[other_method])
-            f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value,3))+',')
+    #         t_statistic, p_value = ranksums(compare_list['META'], compare_list[other_method])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value,3))+',')
 
-            # print('Wilcoxon: ' + str(p_value) + ' ' +str(p_value > 0.05))
+    #         # print('Wilcoxon: ' + str(p_value) + ' ' +str(p_value > 0.05))
 
-            t_statistic, p_value = ttest_rel(compare_list['META'], compare_list[other_method])
-            f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+'\n')
+    #         t_statistic, p_value = ttest_rel(compare_list['META'], compare_list[other_method])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+'\n')
+
+
+    #     # Compare metaga with ahr
+    # filename = 'stat_results.csv'
+    # with open(filename, 'a') as f:
+    #     instances = ['howe1','howe2','howe3','howe4','howe5','pratt1','pratt2','pratt3','pratt4','pratt5','ktruss1','ktruss2','ktruss3','ktruss4','ktruss5','warren1','warren2','warren3','warren4','warren5']    
+    #     k_values = [1, 2,4,8]
+    #     for k_value in k_values:
+    #         compare_list = {}
+    #         other_method = 'MAX-LB'
+    #         compare_list[other_method] = []
+    #         compare_list['META'] = []
+
+    #         for instance in instances:
+    #             for row in metaga_df.iterrows():
+    #                 if row[0] == instance and row[1]['k'] == k_value:
+    #                     compare_list['META'].append(row[1]['best'])
+    #                     break
+    #             for row in max_lb_df.iterrows():
+    #                 if row[0] == instance:
+    #                     compare_list[other_method].append(row[1][k_value])
+    #                     break
+            
+    #         f.write(str(k_value) + ',')
+
+    #         t_statistic, p_value = mannwhitneyu(compare_list['META'], compare_list[other_method])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value,3))+',')
+
+    #         # print('Mannwhitneyu: ' + str(p_value) + ' ' +str(p_value > 0.05))
+
+    #         t_statistic, p_value = ranksums(compare_list['META'], compare_list[other_method])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value,3))+',')
+
+    #         # print('Wilcoxon: ' + str(p_value) + ' ' +str(p_value > 0.05))
+
+    #         t_statistic, p_value = ttest_rel(compare_list['META'], compare_list[other_method])
+    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+'\n')
 
 
     mass_df = pandas.read_csv('data_analysis/data_export.csv', header=0, index_col=0)
