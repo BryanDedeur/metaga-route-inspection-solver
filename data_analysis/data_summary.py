@@ -670,7 +670,7 @@ def main():
     # --------------------------------------------------------------------
     # mass_df = pandas.read_csv('data_analysis/data_export.csv', header=0, index_col=0)
 
-    #     # Define a lambda function to extract the run data, configuration data, and run name
+        # Define a lambda function to extract the run data, configuration data, and run name
     # extract_data = lambda x: (eval(x['summary']), eval(x['config']), x['name'])
 
     # # Apply the lambda function to each row in the dataframe and store the results in separate columns
@@ -700,6 +700,7 @@ def main():
     #     col_data['4stat'] = []
     #     col_data[8] = []
     #     col_data['8stat'] = []
+    #     col_data['avg'] = []
 
     #     row_data = []
     #     for instance in instances:
@@ -739,7 +740,7 @@ def main():
     #             # if negative single has a lower objective value, if positive single has a larger objective value
     #             avg1 = numpy.min(compare_list[this_method])
     #             avg2 = numpy.min(compare_list[other_method])
-    #             percentage_improvement = round(100*(avg1-avg2)/avg2,3)
+    #             percentage_improvement = round(100*(avg1-avg2)/avg2,2)
     #             row_data.append(percentage_improvement)
     #             col_data[k_value].append(percentage_improvement)
     #             f.write(str(percentage_improvement) + '\% & ')
@@ -752,95 +753,29 @@ def main():
     #             # out = False
     #             # if  < 0.05:
     #             #     out = True
-    #             f.write(str(round(p_value,4)) +' & ')
+    #             f.write(str(format(p_value, ".2e")) +' & ')
 
-    #         avg = round(numpy.average(row_data),3)
+    #         avg = round(numpy.average(row_data),2)
+    #         col_data['avg'].append(avg)
     #         f.write(str(avg) +'\% \n')
     #         row_data = []
 
     #     for key in col_data.keys():
-    #         f.write(str(round(numpy.average(col_data[key]),4)) +'\% ')
+    #         if isinstance(key, str):
+    #             if key == 'avg':
+    #                 f.write('{\\bf ' + str(round(numpy.average(col_data[key]),2)) +'\%}')
+    #             else:
+    #                 f.write('{\\bf ' +format(numpy.average(col_data[key]),".2e")+'} & ')
+    #         else:
+    #             f.write('{\\bf ' +str(round(numpy.average(col_data[key]),2)) +'\%} & ')
     #     f.write('\n')
     # print(0)
 
-    heuristic_groups = ['META', 'DEGA']
-
-    data = {}
-    data[heuristic_groups[0]] = pandas.read_csv('data_analysis/meta-multi-depot-data.csv',header=0, index_col=0)
-    data[heuristic_groups[1]] = pandas.read_csv('data_analysis/dega-multi-depot-data.csv',header=0, index_col=0)
-
-    # Compare metaga with ahr
-    filename = 'stat_results.csv'
-    with open(filename, 'a') as f:
-        instances = ['howe1','howe2','howe3','howe4','howe5','pratt1','pratt2','pratt3','pratt4','pratt5','ktruss1','ktruss2','ktruss3','ktruss4','ktruss5','warren1','warren2','warren3','warren4','warren5']
-        col_data = {}
-        col_data[2] = []
-        col_data['2stat'] = []
-        col_data[4] = []
-        col_data['4stat'] = []
-        col_data[8] = []
-        col_data['8stat'] = []
-
-        row_data = []
-        for instance in instances:
-            f.write(instance + ' & ')
-            k_values = [2,4,8]
-            for k_value in k_values:
-                compare_list = {}
-                this_method = heuristic_groups[0]
-                other_method = heuristic_groups[1]
-                compare_list[this_method] = []
-                compare_list[other_method] = []
-                for row in data[this_method].iterrows():
-                    # METHOD 1
-                    if row[0] == instance and row[1]['k'] == k_value:
-                        compare_list[this_method].append(row[1]['Objective'])
-                for row in data[other_method].iterrows():
-                    # METHOD 2
-                    if row[0] == instance and row[1]['k'] == k_value:
-                        compare_list[other_method].append(row[1]['Objective'])
-            
-                num_runs = len(compare_list[this_method])
-                if num_runs != 30:
-                    print("WARN: " + this_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
-                num_runs = len(compare_list[other_method])
-                if num_runs != 30:
-                    print("WARN: " + other_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
-                
-                # percentage improvement
-                # if negative single has a lower objective value, if positive single has a larger objective value
-                avg1 = numpy.average(compare_list[this_method])
-                avg2 = numpy.average(compare_list[other_method])
-                percentage_improvement = round((100 * ((avg2-avg1)/avg1)),3)
-                row_data.append(percentage_improvement)
-                col_data[k_value].append(percentage_improvement)
-                f.write(str(percentage_improvement) + '\% & ')
-
-                # t_statistic, p_value = mannwhitneyu(compare_list[this_method], compare_list[other_method])
-                t_statistic, p_value = ranksums(compare_list[this_method], compare_list[other_method])
-
-                col_data[str(k_value) + "stat"].append(p_value)
-
-                # out = False
-                # if  < 0.05:
-                #     out = True
-                # f.write(str(round(p_value,10)) +' & ')
-
-            avg = round(numpy.average(row_data),3)
-            f.write(str(avg) +'\% \n')
-            row_data = []
-
-        for key in col_data.keys():
-            f.write(str(round(numpy.average(col_data[key]),3)) +'\% ')
-        f.write('\n')
-    print(0)
-
-
-    # heuristic_groups = ['META', 'CPP']
+    # heuristic_groups = ['META', 'DEGA']
 
     # data = {}
     # data[heuristic_groups[0]] = pandas.read_csv('data_analysis/meta-multi-depot-data.csv',header=0, index_col=0)
-    # data[heuristic_groups[1]] = pandas.read_csv('data_analysis/max_lb.csv',header=0, index_col=0)
+    # data[heuristic_groups[1]] = pandas.read_csv('data_analysis/dega-multi-depot-data.csv',header=0, index_col=0)
 
     # # Compare metaga with ahr
     # filename = 'stat_results.csv'
@@ -853,6 +788,7 @@ def main():
     #     col_data['4stat'] = []
     #     col_data[8] = []
     #     col_data['8stat'] = []
+    #     col_data['avg'] = []
 
     #     row_data = []
     #     for instance in instances:
@@ -870,44 +806,132 @@ def main():
     #                     compare_list[this_method].append(row[1]['Objective'])
     #             for row in data[other_method].iterrows():
     #                 # METHOD 2
-    #                 if row[0] == instance:
-    #                     compare_list[other_method].append(row[1][1]/k_value)
+    #                 if row[0] == instance and row[1]['k'] == k_value:
+    #                     compare_list[other_method].append(row[1]['Objective'])
             
     #             num_runs = len(compare_list[this_method])
     #             if num_runs != 30:
     #                 print("WARN: " + this_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
-    #             # num_runs = len(compare_list[other_method])
-    #             # if num_runs != 30:
-    #             #     print("WARN: " + other_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
+    #             num_runs = len(compare_list[other_method])
+    #             if num_runs != 30:
+    #                 print("WARN: " + other_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
                 
     #             # percentage improvement
     #             # if negative single has a lower objective value, if positive single has a larger objective value
-    #             avg1 = numpy.min(compare_list[this_method])
+    #             avg1 = numpy.average(compare_list[this_method])
     #             avg2 = numpy.average(compare_list[other_method])
-    #             percentage_improvement = round(100*(avg2-avg1)/avg1,3)
+    #             percentage_improvement = round((100 * ((avg2-avg1)/avg1)),2)
     #             row_data.append(percentage_improvement)
     #             col_data[k_value].append(percentage_improvement)
     #             f.write(str(percentage_improvement) + '\% & ')
 
     #             # t_statistic, p_value = mannwhitneyu(compare_list[this_method], compare_list[other_method])
-    #             temp = [avg2] * 30
-    #             t_statistic, p_value = mannwhitneyu(compare_list[this_method], [avg2])
+    #             t_statistic, p_value = ranksums(compare_list[this_method], compare_list[other_method])
 
     #             col_data[str(k_value) + "stat"].append(p_value)
 
     #             # out = False
     #             # if  < 0.05:
     #             #     out = True
-    #             # f.write(str(round(p_value,3)) +' & ')
+    #             f.write(str(format(p_value, ".2e")) +' & ')
 
     #         avg = round(numpy.average(row_data),3)
+    #         col_data['avg'].append(avg)
     #         f.write(str(avg) +'\% \n')
     #         row_data = []
 
     #     for key in col_data.keys():
-    #         f.write(str(round(numpy.average(col_data[key]),3)) +'\% ')
+    #         if isinstance(key, str):
+    #             if key == 'avg':
+    #                 f.write('{\\bf ' + str(round(numpy.average(col_data[key]),2)) +'\%}')
+    #             else:
+    #                 f.write('{\\bf ' +format(numpy.average(col_data[key]),".2e")+'} & ')
+    #         else:
+    #             f.write('{\\bf ' +str(round(numpy.average(col_data[key]),2)) +'\%} & ')
     #     f.write('\n')
     # print(0)
+
+
+    heuristic_groups = ['META', 'CPP']
+
+    data = {}
+    data[heuristic_groups[0]] = pandas.read_csv('data_analysis/meta-multi-depot-data.csv',header=0, index_col=0)
+    data[heuristic_groups[1]] = pandas.read_csv('data_analysis/max_lb.csv',header=0, index_col=0)
+
+    # Compare metaga with ahr
+    filename = 'stat_results.csv'
+    with open(filename, 'a') as f:
+        instances = ['howe1','howe2','howe3','howe4','howe5','pratt1','pratt2','pratt3','pratt4','pratt5','ktruss1','ktruss2','ktruss3','ktruss4','ktruss5','warren1','warren2','warren3','warren4','warren5']
+        col_data = {}
+        col_data[2] = []
+        col_data['2stat'] = []
+        col_data[4] = []
+        col_data['4stat'] = []
+        col_data[8] = []
+        col_data['8stat'] = []
+        col_data['avg'] = []
+
+        row_data = []
+        for instance in instances:
+            f.write(instance + ' & ')
+            k_values = [2,4,8]
+            for k_value in k_values:
+                compare_list = {}
+                this_method = heuristic_groups[0]
+                other_method = heuristic_groups[1]
+                compare_list[this_method] = []
+                compare_list[other_method] = []
+                for row in data[this_method].iterrows():
+                    # METHOD 1
+                    if row[0] == instance and row[1]['k'] == k_value:
+                        compare_list[this_method].append(row[1]['Objective'])
+                for row in data[other_method].iterrows():
+                    # METHOD 2
+                    if row[0] == instance:
+                        compare_list[other_method].append(row[1][1]/k_value)
+            
+                num_runs = len(compare_list[this_method])
+                if num_runs != 30:
+                    print("WARN: " + this_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
+                # num_runs = len(compare_list[other_method])
+                # if num_runs != 30:
+                #     print("WARN: " + other_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
+                
+                # percentage improvement
+                # if negative single has a lower objective value, if positive single has a larger objective value
+                avg1 = numpy.min(compare_list[this_method])
+                avg2 = numpy.average(compare_list[other_method])
+                percentage_improvement = round(100*(avg2-avg1)/avg1,2)
+                row_data.append(percentage_improvement)
+                col_data[k_value].append(percentage_improvement)
+                f.write(str(percentage_improvement) + '\% & ')
+
+                # t_statistic, p_value = mannwhitneyu(compare_list[this_method], compare_list[other_method])
+                temp = [avg2] * 30
+                t_statistic, p_value = ranksums(compare_list[this_method], [avg2])
+
+                col_data[str(k_value) + "stat"].append(p_value)
+
+                # out = False
+                # if  < 0.05:
+                #     out = True
+                f.write(str(format(p_value, ".2e")) +' & ')
+
+            avg = round(numpy.average(row_data),2)
+            col_data['avg'].append(avg)
+            f.write(str(avg) +'\% \n')
+            row_data = []
+
+        for key in col_data.keys():
+            if isinstance(key, str):
+                if key == 'avg':
+                    f.write('{\\bf ' + str(round(numpy.average(col_data[key]),2)) +'\%}')
+                else:
+                    f.write('{\\bf ' +format(numpy.average(col_data[key]),".3")+'} & ')
+            else:
+                f.write('{\\bf ' +str(round(numpy.average(col_data[key]),2)) +'\%} & ')
+        f.write('\n')
+    print(0)
 
 
 
