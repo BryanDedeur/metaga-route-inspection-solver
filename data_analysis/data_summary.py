@@ -13,6 +13,7 @@ from scipy.stats import ttest_rel
 from scipy.stats import ttest_ind
 from scipy.stats import wilcoxon
 from scipy.stats import ranksums
+from scipy.stats import shapiro
 
 import wandb
 
@@ -407,28 +408,28 @@ def main():
 
     args = parse_args()
 
-    ahr_df = pandas.read_csv('data_analysis/ahr_data.csv',header=0, index_col=0)
-    metaga_df = pandas.read_csv('data_analysis/metaga_data.csv',header=0, index_col=0)
-    dega_df = pandas.read_csv('data_analysis/dega_data.csv',header=0, index_col=0)
-    max_lb_df = pandas.read_csv('data_analysis/max_lb.csv',header=0, index_col=0)
+    # ahr_df = pandas.read_csv('data_analysis/ahr_data.csv',header=0, index_col=0)
+    # metaga_df = pandas.read_csv('data_analysis/metaga_data.csv',header=0, index_col=0)
+    # dega_df = pandas.read_csv('data_analysis/dega_data.csv',header=0, index_col=0)
+    # max_lb_df = pandas.read_csv('data_analysis/max_lb.csv',header=0, index_col=0)
 
     # Clears the results file
     filename = 'stat_results.csv'
     with open(filename, 'w') as f:
         pass
 
-    filename = 'stat_results.csv'
-    with open(filename, 'a') as f:
-        instances = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']   
-        k_values = [2,4,8]
-        for instance in instances:
-            f.write(instance + ',')
-            for k_value in k_values:
-                for row in metaga_df.iterrows():
-                    if row[0] == instance and row[1]['k'] == k_value:
-                        f.write(str(round(row[1]['best'], 3)) + ',')
-                        break
-            f.write('\n')
+    # filename = 'stat_results.csv'
+    # with open(filename, 'a') as f:
+    #     instances = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']   
+    #     k_values = [2,4,8]
+    #     for instance in instances:
+    #         f.write(instance + ',')
+    #         for k_value in k_values:
+    #             for row in metaga_df.iterrows():
+    #                 if row[0] == instance and row[1]['k'] == k_value:
+    #                     f.write(str(round(row[1]['best'], 3)) + ',')
+    #                     break
+    #         f.write('\n')
 
     # # Compare metaga with ahr
     # filename = 'stat_results.csv'
@@ -538,20 +539,20 @@ def main():
     #         t_statistic, p_value = ttest_rel(compare_list['META'], compare_list[other_method])
     #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+'\n')
 
-    filename = 'stat_results.csv'
-    with open(filename, 'a') as f:
-        instances = ['howe1','howe2','howe3','howe4','howe5','pratt1','pratt2','pratt3','pratt4','pratt5','ktruss1','ktruss2','ktruss3','ktruss4','ktruss5','warren1','warren2','warren3','warren4','warren5']    
-        k_values = [2,4,8]
-        for instance in instances:
-            f.write(instance + ',')
-            for k_value in k_values:
-                for row in metaga_df.iterrows():
-                    if row[0] == instance and row[1]['k'] == k_value:
-                        f.write(str(round(row[1]['best'], 3)) + ',')
-                        break
-            f.write('\n')
+    # filename = 'stat_results.csv'
+    # with open(filename, 'a') as f:
+    #     instances = ['howe1','howe2','howe3','howe4','howe5','pratt1','pratt2','pratt3','pratt4','pratt5','ktruss1','ktruss2','ktruss3','ktruss4','ktruss5','warren1','warren2','warren3','warren4','warren5']    
+    #     k_values = [2,4,8]
+    #     for instance in instances:
+    #         f.write(instance + ',')
+    #         for k_value in k_values:
+    #             for row in metaga_df.iterrows():
+    #                 if row[0] == instance and row[1]['k'] == k_value:
+    #                     f.write(str(round(row[1]['best'], 3)) + ',')
+    #                     break
+    #         f.write('\n')
 
-    print()
+    # print()
         # Compare metaga with ahr
     # filename = 'stat_results.csv'
     # with open(filename, 'a') as f:
@@ -626,13 +627,14 @@ def main():
     #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+'\n')
 
 
-    mass_df = pandas.read_csv('data_analysis/data_export.csv', header=0, index_col=0)
 
-    # Define a lambda function to extract the run data, configuration data, and run name
-    extract_data = lambda x: (eval(x['summary']), eval(x['config']), x['name'])
 
-    # Apply the lambda function to each row in the dataframe and store the results in separate columns
-    mass_df[['summary', 'config', 'name']] = mass_df.apply(extract_data, axis=1, result_type='expand')
+
+    # # Define a lambda function to extract the run data, configuration data, and run name
+    # extract_data = lambda x: (eval(x['summary']), eval(x['config']), x['name'])
+
+    # # Apply the lambda function to each row in the dataframe and store the results in separate columns
+    # mass_df[['summary', 'config', 'name']] = mass_df.apply(extract_data, axis=1, result_type='expand')
 
     # # drop duplicates based on these columns
     # df = df.drop_duplicates(subset=['routing.num_tours', 'instance.name', 'routing.heuristic_group', 'ga.random_seed'])
@@ -661,49 +663,280 @@ def main():
     #     x['config']['routing'].get('depot_group') == 'multi'
     # ))
     
-    subset_df = filter_dataframe(mass_df, lambda x: 'routing' in x['config'] and (
-        x['config']['routing'].get('depot_group') == None
-    ))
+
 
     # --------------------------------------------------------------------
     # Subsection 2.1: MetaGA 1 Depot vs MetaGA Multi Depot
     # --------------------------------------------------------------------
+    # mass_df = pandas.read_csv('data_analysis/data_export.csv', header=0, index_col=0)
 
-    heuristic_groups = ['MMMR', 'DEGA']
+    #     # Define a lambda function to extract the run data, configuration data, and run name
+    # extract_data = lambda x: (eval(x['summary']), eval(x['config']), x['name'])
+
+    # # Apply the lambda function to each row in the dataframe and store the results in separate columns
+    # mass_df[['summary', 'config', 'name']] = mass_df.apply(extract_data, axis=1, result_type='expand')
+
+    # subset_df = filter_dataframe(mass_df, lambda x: 'routing' in x['config'] and (
+    #     x['config']['routing'].get('heuristic_group') == 'MMMR'
+    # ))
+
+    # depot_groups = ['single', 'multi']
+
+    # sub_subset_dfs = {}
+    # for depot_group in depot_groups:
+    #     sub_subset_dfs[depot_group] = filter_dataframe(subset_df, lambda x: 'routing' in x['config'] and (
+    #         x['config']['routing'].get('depot_group') == depot_group
+    #     ))
+        
+
+    # # Compare metaga with ahr
+    # filename = 'stat_results.csv'
+    # with open(filename, 'a') as f:
+    #     instances = ['howe1','howe2','howe3','howe4','howe5','pratt1','pratt2','pratt3','pratt4','pratt5','ktruss1','ktruss2','ktruss3','ktruss4','ktruss5','warren1','warren2','warren3','warren4','warren5']
+    #     col_data = {}
+    #     col_data[2] = []
+    #     col_data['2stat'] = []
+    #     col_data[4] = []
+    #     col_data['4stat'] = []
+    #     col_data[8] = []
+    #     col_data['8stat'] = []
+
+    #     row_data = []
+    #     for instance in instances:
+    #         f.write(instance + ' & ')
+    #         k_values = [2,4,8]
+    #         for k_value in k_values:
+    #             compare_list = {}
+    #             this_method = depot_groups[0]
+    #             other_method = depot_groups[1]
+    #             compare_list[this_method] = []
+    #             compare_list[other_method] = []
+    #             for row in sub_subset_dfs[this_method].iterrows():
+    #                 # METHOD 1
+    #                 if row[1]['config']['instance']['name'] == instance and row[1]['config']['routing']['num_tours'] == k_value:
+    #                     compare_list[this_method].append(row[1]['summary']['run best obj'])
+    #             for row in sub_subset_dfs[other_method].iterrows():
+    #                 # METHOD 2
+    #                 if row[1]['config']['instance']['name'] == instance and row[1]['config']['routing']['num_tours'] == k_value:
+    #                     compare_list[other_method].append(row[1]['summary']['run best obj'])
+            
+    #             # # avg obj
+    #             # f.write( + ',')
+
+    #             # # best obj method 1
+    #             # f.write( + ',')
+
+    #             # # best obj method 2
+    #             # f.write( + ',')
+    #             num_runs = len(compare_list[this_method])
+    #             if num_runs != 30:
+    #                 print("WARN: " + this_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
+    #             num_runs = len(compare_list[other_method])
+    #             if num_runs != 30:
+    #                 print("WARN: " + other_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
+                
+    #             # percentage improvement
+    #             # if negative single has a lower objective value, if positive single has a larger objective value
+    #             avg1 = numpy.min(compare_list[this_method])
+    #             avg2 = numpy.min(compare_list[other_method])
+    #             percentage_improvement = round(100*(avg1-avg2)/avg2,3)
+    #             row_data.append(percentage_improvement)
+    #             col_data[k_value].append(percentage_improvement)
+    #             f.write(str(percentage_improvement) + '\% & ')
+
+    #             # t_statistic, p_value = mannwhitneyu(compare_list[this_method], compare_list[other_method])
+    #             t_statistic, p_value = ranksums(compare_list[this_method], compare_list[other_method])
+
+    #             col_data[str(k_value) + "stat"].append(p_value)
+
+    #             # out = False
+    #             # if  < 0.05:
+    #             #     out = True
+    #             f.write(str(round(p_value,4)) +' & ')
+
+    #         avg = round(numpy.average(row_data),3)
+    #         f.write(str(avg) +'\% \n')
+    #         row_data = []
+
+    #     for key in col_data.keys():
+    #         f.write(str(round(numpy.average(col_data[key]),4)) +'\% ')
+    #     f.write('\n')
+    # print(0)
+
+    heuristic_groups = ['META', 'DEGA']
+
+    data = {}
+    data[heuristic_groups[0]] = pandas.read_csv('data_analysis/meta-multi-depot-data.csv',header=0, index_col=0)
+    data[heuristic_groups[1]] = pandas.read_csv('data_analysis/dega-multi-depot-data.csv',header=0, index_col=0)
+
+    # Compare metaga with ahr
+    filename = 'stat_results.csv'
+    with open(filename, 'a') as f:
+        instances = ['howe1','howe2','howe3','howe4','howe5','pratt1','pratt2','pratt3','pratt4','pratt5','ktruss1','ktruss2','ktruss3','ktruss4','ktruss5','warren1','warren2','warren3','warren4','warren5']
+        col_data = {}
+        col_data[2] = []
+        col_data['2stat'] = []
+        col_data[4] = []
+        col_data['4stat'] = []
+        col_data[8] = []
+        col_data['8stat'] = []
+
+        row_data = []
+        for instance in instances:
+            f.write(instance + ' & ')
+            k_values = [2,4,8]
+            for k_value in k_values:
+                compare_list = {}
+                this_method = heuristic_groups[0]
+                other_method = heuristic_groups[1]
+                compare_list[this_method] = []
+                compare_list[other_method] = []
+                for row in data[this_method].iterrows():
+                    # METHOD 1
+                    if row[0] == instance and row[1]['k'] == k_value:
+                        compare_list[this_method].append(row[1]['Objective'])
+                for row in data[other_method].iterrows():
+                    # METHOD 2
+                    if row[0] == instance and row[1]['k'] == k_value:
+                        compare_list[other_method].append(row[1]['Objective'])
+            
+                num_runs = len(compare_list[this_method])
+                if num_runs != 30:
+                    print("WARN: " + this_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
+                num_runs = len(compare_list[other_method])
+                if num_runs != 30:
+                    print("WARN: " + other_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
+                
+                # percentage improvement
+                # if negative single has a lower objective value, if positive single has a larger objective value
+                avg1 = numpy.average(compare_list[this_method])
+                avg2 = numpy.average(compare_list[other_method])
+                percentage_improvement = round((100 * ((avg2-avg1)/avg1)),3)
+                row_data.append(percentage_improvement)
+                col_data[k_value].append(percentage_improvement)
+                f.write(str(percentage_improvement) + '\% & ')
+
+                # t_statistic, p_value = mannwhitneyu(compare_list[this_method], compare_list[other_method])
+                t_statistic, p_value = ranksums(compare_list[this_method], compare_list[other_method])
+
+                col_data[str(k_value) + "stat"].append(p_value)
+
+                # out = False
+                # if  < 0.05:
+                #     out = True
+                # f.write(str(round(p_value,10)) +' & ')
+
+            avg = round(numpy.average(row_data),3)
+            f.write(str(avg) +'\% \n')
+            row_data = []
+
+        for key in col_data.keys():
+            f.write(str(round(numpy.average(col_data[key]),3)) +'\% ')
+        f.write('\n')
+    print(0)
 
 
-    sub_subset_dfs = {}
-    for h_group in heuristic_groups:
-        sub_subset_dfs[h_group] = filter_dataframe(subset_df, lambda x: 'routing' in x['config'] and (
-            x['config']['routing']['heuristic_group'] == h_group
-        ))
+    # heuristic_groups = ['META', 'CPP']
+
+    # data = {}
+    # data[heuristic_groups[0]] = pandas.read_csv('data_analysis/meta-multi-depot-data.csv',header=0, index_col=0)
+    # data[heuristic_groups[1]] = pandas.read_csv('data_analysis/max_lb.csv',header=0, index_col=0)
+
+    # # Compare metaga with ahr
+    # filename = 'stat_results.csv'
+    # with open(filename, 'a') as f:
+    #     instances = ['howe1','howe2','howe3','howe4','howe5','pratt1','pratt2','pratt3','pratt4','pratt5','ktruss1','ktruss2','ktruss3','ktruss4','ktruss5','warren1','warren2','warren3','warren4','warren5']
+    #     col_data = {}
+    #     col_data[2] = []
+    #     col_data['2stat'] = []
+    #     col_data[4] = []
+    #     col_data['4stat'] = []
+    #     col_data[8] = []
+    #     col_data['8stat'] = []
+
+    #     row_data = []
+    #     for instance in instances:
+    #         f.write(instance + ' & ')
+    #         k_values = [2,4,8]
+    #         for k_value in k_values:
+    #             compare_list = {}
+    #             this_method = heuristic_groups[0]
+    #             other_method = heuristic_groups[1]
+    #             compare_list[this_method] = []
+    #             compare_list[other_method] = []
+    #             for row in data[this_method].iterrows():
+    #                 # METHOD 1
+    #                 if row[0] == instance and row[1]['k'] == k_value:
+    #                     compare_list[this_method].append(row[1]['Objective'])
+    #             for row in data[other_method].iterrows():
+    #                 # METHOD 2
+    #                 if row[0] == instance:
+    #                     compare_list[other_method].append(row[1][1]/k_value)
+            
+    #             num_runs = len(compare_list[this_method])
+    #             if num_runs != 30:
+    #                 print("WARN: " + this_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
+    #             # num_runs = len(compare_list[other_method])
+    #             # if num_runs != 30:
+    #             #     print("WARN: " + other_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
+                
+    #             # percentage improvement
+    #             # if negative single has a lower objective value, if positive single has a larger objective value
+    #             avg1 = numpy.min(compare_list[this_method])
+    #             avg2 = numpy.average(compare_list[other_method])
+    #             percentage_improvement = round(100*(avg2-avg1)/avg1,3)
+    #             row_data.append(percentage_improvement)
+    #             col_data[k_value].append(percentage_improvement)
+    #             f.write(str(percentage_improvement) + '\% & ')
+
+    #             # t_statistic, p_value = mannwhitneyu(compare_list[this_method], compare_list[other_method])
+    #             temp = [avg2] * 30
+    #             t_statistic, p_value = mannwhitneyu(compare_list[this_method], [avg2])
+
+    #             col_data[str(k_value) + "stat"].append(p_value)
+
+    #             # out = False
+    #             # if  < 0.05:
+    #             #     out = True
+    #             # f.write(str(round(p_value,3)) +' & ')
+
+    #         avg = round(numpy.average(row_data),3)
+    #         f.write(str(avg) +'\% \n')
+    #         row_data = []
+
+    #     for key in col_data.keys():
+    #         f.write(str(round(numpy.average(col_data[key]),3)) +'\% ')
+    #     f.write('\n')
+    # print(0)
+
+
 
     # Clears the results file
-    filename = 'results.csv'
-    with open(filename, 'a') as f:
-        instance_names = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']
-        for instance in instance_names:
-            f.write(instance + ',')
-            for k_value in k_values:
-                compare_set_df = {}
-                for h_group in heuristic_groups:
-                    temp = filter_dataframe(sub_subset_dfs[h_group], lambda x: 'routing' in x['config'] and (
-                        x['config']['routing']['num_tours'] == k_value and
-                        x['config']['instance']['name'] == instance
-                    ))
-                    compare_set_df[h_group] = []
-                    for run in temp.values:
-                        compare_set_df[h_group].append(run[0]['run best obj'])
-                if len(compare_set_df[heuristic_groups[0]]) != len(compare_set_df[heuristic_groups[1]]):
-                    print("Cannot compare: " + "k=" + str(k_value) + " instance=" + instance)
-                    f.write('NA,NA,')
-                    continue
+    # filename = 'results.csv'
+    # with open(filename, 'a') as f:
+    #     instance_names = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']
+    #     for instance in instance_names:
+    #         f.write(instance + ',')
+    #         for k_value in k_values:
+    #             compare_set_df = {}
+    #             for h_group in heuristic_groups:
+    #                 temp = filter_dataframe(sub_subset_dfs[h_group], lambda x: 'routing' in x['config'] and (
+    #                     x['config']['routing']['num_tours'] == k_value and
+    #                     x['config']['instance']['name'] == instance
+    #                 ))
+    #                 compare_set_df[h_group] = []
+    #                 for run in temp.values:
+    #                     compare_set_df[h_group].append(run[0]['run best obj'])
+    #             if len(compare_set_df[heuristic_groups[0]]) != len(compare_set_df[heuristic_groups[1]]):
+    #                 print("Cannot compare: " + "k=" + str(k_value) + " instance=" + instance)
+    #                 f.write('NA,NA,')
+    #                 continue
                 
-                t_statistic, p_value = mannwhitneyu(compare_set_df[heuristic_groups[0]], compare_set_df[heuristic_groups[1]])
-                sig_diff = p_value > 0.05
-                print("k=" + str(k_value) + " instance=" + instance + " sig_diff=" + str(sig_diff))
-                f.write(str(p_value) + ',' +str(sig_diff) +',')
-            f.write('\n')
+    #             t_statistic, p_value = mannwhitneyu(compare_set_df[heuristic_groups[0]], compare_set_df[heuristic_groups[1]])
+    #             sig_diff = p_value > 0.05
+    #             print("k=" + str(k_value) + " instance=" + instance + " sig_diff=" + str(sig_diff))
+    #             f.write(str(p_value) + ',' +str(sig_diff) +',')
+    #         f.write('\n')
 
     print()
 
