@@ -408,10 +408,10 @@ def main():
 
     args = parse_args()
 
-    # ahr_df = pandas.read_csv('data_analysis/ahr_data.csv',header=0, index_col=0)
-    # metaga_df = pandas.read_csv('data_analysis/metaga_data.csv',header=0, index_col=0)
-    # dega_df = pandas.read_csv('data_analysis/dega_data.csv',header=0, index_col=0)
-    # max_lb_df = pandas.read_csv('data_analysis/max_lb.csv',header=0, index_col=0)
+    ahr_df = pandas.read_csv('data_analysis/ahr_data.csv',header=0, index_col=0)
+    metaga_df = pandas.read_csv('data_analysis/metaga_data.csv',header=0, index_col=0)
+    dega_df = pandas.read_csv('data_analysis/dega_data.csv',header=0, index_col=0)
+    max_lb_df = pandas.read_csv('data_analysis/max_lb.csv',header=0, index_col=0)
 
     # Clears the results file
     filename = 'stat_results.csv'
@@ -431,42 +431,51 @@ def main():
     #                     break
     #         f.write('\n')
 
-    # # Compare metaga with ahr
-    # filename = 'stat_results.csv'
-    # with open(filename, 'a') as f:
-    #     instances = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']    
-    #     k_values = [2,4,8]
-    #     for k_value in k_values:
-    #         compare_list = {}
-    #         compare_list['AHR'] = []
-    #         compare_list['META'] = []
+    # Compare metaga with ahr
+    filename = 'stat_results.csv'
+    with open(filename, 'a') as f:
+        instances = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']    
+        k_values = [2,4,8]
+        for k_value in k_values:
+            compare_list = {}
+            compare_list['AHR'] = []
+            compare_list['META'] = []
 
-    #         for instance in instances:
-    #             for row in metaga_df.iterrows():
-    #                 if row[0] == instance and row[1]['k'] == k_value:
-    #                     compare_list['META'].append(row[1]['best'])
-    #                     break
-    #             for row in ahr_df.iterrows():
-    #                 if row[0] == instance and row[1]['k'] == k_value:
-    #                     compare_list['AHR'].append(row[1]['TInf'])
-    #                     break
+            max_lb_list = []
+
+            for instance in instances:
+                for row in max_lb_df.iterrows():
+                    if row[0] == instance:
+                        max_lb_list.append(row[1][k_value])
+                        break
+
+            for i in range(len(instances)):
+                for row in metaga_df.iterrows():
+                    if row[0] == instances[i] and row[1]['k'] == k_value:
+                        compare_list['META'].append(row[1]['best'] - max_lb_df[i])
+                        break
+                for row in ahr_df.iterrows():
+                    if row[0] == instances[i] and row[1]['k'] == k_value:
+                        compare_list['AHR'].append(row[1]['TInf'])
+                        break
+            print(0)
             
-    #         f.write(str(k_value) + ',')
+            # f.write(str(k_value) + ',')
 
-    #         t_statistic, p_value = mannwhitneyu(compare_list['AHR'], compare_list['META'])
-    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+',')
+            # t_statistic, p_value = mannwhitneyu(compare_list['AHR'], compare_list['META'])
+            # f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+',')
 
-    #         # print('Mannwhitneyu: ' + str(p_value) + ' ' +str(p_value > 0.05))
+            # # print('Mannwhitneyu: ' + str(p_value) + ' ' +str(p_value > 0.05))
 
-    #         t_statistic, p_value = ranksums(compare_list['AHR'], compare_list['META'])
-    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+',')
+            # t_statistic, p_value = ranksums(compare_list['AHR'], compare_list['META'])
+            # f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+',')
 
-    #         # print('Wilcoxon: ' + str(p_value) + ' ' +str(p_value > 0.05))
+            # # print('Wilcoxon: ' + str(p_value) + ' ' +str(p_value > 0.05))
 
-    #         t_statistic, p_value = ttest_rel(compare_list['AHR'], compare_list['META'])
-    #         f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+'\n')
+            # t_statistic, p_value = ttest_rel(compare_list['AHR'], compare_list['META'])
+            # f.write(str(round(t_statistic, 3)) + ',' + str(round(p_value, 3))+'\n')
 
-    #     # Compare metaga with ahr
+        # Compare metaga with ahr
     # filename = 'stat_results.csv'
     # with open(filename, 'a') as f:
     #     instances = ['gdb1','gdb2','gdb3','gdb4','gdb5','gdb6','gdb7','gdb8','gdb9','gdb10','gdb11','gdb12','gdb13','gdb14','gdb15','gdb16','gdb17','gdb18','gdb19','gdb20', 'gdb21', 'gdb22', 'gdb23']    
@@ -852,86 +861,86 @@ def main():
     # print(0)
 
 
-    heuristic_groups = ['META', 'CPP']
+    # heuristic_groups = ['META', 'CPP']
 
-    data = {}
-    data[heuristic_groups[0]] = pandas.read_csv('data_analysis/meta-multi-depot-data.csv',header=0, index_col=0)
-    data[heuristic_groups[1]] = pandas.read_csv('data_analysis/max_lb.csv',header=0, index_col=0)
+    # data = {}
+    # data[heuristic_groups[0]] = pandas.read_csv('data_analysis/meta-multi-depot-data.csv',header=0, index_col=0)
+    # data[heuristic_groups[1]] = pandas.read_csv('data_analysis/max_lb.csv',header=0, index_col=0)
 
-    # Compare metaga with ahr
-    filename = 'stat_results.csv'
-    with open(filename, 'a') as f:
-        instances = ['howe1','howe2','howe3','howe4','howe5','pratt1','pratt2','pratt3','pratt4','pratt5','ktruss1','ktruss2','ktruss3','ktruss4','ktruss5','warren1','warren2','warren3','warren4','warren5']
-        col_data = {}
-        col_data[2] = []
-        col_data['2stat'] = []
-        col_data[4] = []
-        col_data['4stat'] = []
-        col_data[8] = []
-        col_data['8stat'] = []
-        col_data['avg'] = []
+    # # Compare metaga with ahr
+    # filename = 'stat_results.csv'
+    # with open(filename, 'a') as f:
+    #     instances = ['howe1','howe2','howe3','howe4','howe5','pratt1','pratt2','pratt3','pratt4','pratt5','ktruss1','ktruss2','ktruss3','ktruss4','ktruss5','warren1','warren2','warren3','warren4','warren5']
+    #     col_data = {}
+    #     col_data[2] = []
+    #     col_data['2stat'] = []
+    #     col_data[4] = []
+    #     col_data['4stat'] = []
+    #     col_data[8] = []
+    #     col_data['8stat'] = []
+    #     col_data['avg'] = []
 
-        row_data = []
-        for instance in instances:
-            f.write(instance + ' & ')
-            k_values = [2,4,8]
-            for k_value in k_values:
-                compare_list = {}
-                this_method = heuristic_groups[0]
-                other_method = heuristic_groups[1]
-                compare_list[this_method] = []
-                compare_list[other_method] = []
-                for row in data[this_method].iterrows():
-                    # METHOD 1
-                    if row[0] == instance and row[1]['k'] == k_value:
-                        compare_list[this_method].append(row[1]['Objective'])
-                for row in data[other_method].iterrows():
-                    # METHOD 2
-                    if row[0] == instance:
-                        compare_list[other_method].append(row[1][1]/k_value)
+    #     row_data = []
+    #     for instance in instances:
+    #         f.write(instance + ' & ')
+    #         k_values = [2,4,8]
+    #         for k_value in k_values:
+    #             compare_list = {}
+    #             this_method = heuristic_groups[0]
+    #             other_method = heuristic_groups[1]
+    #             compare_list[this_method] = []
+    #             compare_list[other_method] = []
+    #             for row in data[this_method].iterrows():
+    #                 # METHOD 1
+    #                 if row[0] == instance and row[1]['k'] == k_value:
+    #                     compare_list[this_method].append(row[1]['Objective'])
+    #             for row in data[other_method].iterrows():
+    #                 # METHOD 2
+    #                 if row[0] == instance:
+    #                     compare_list[other_method].append(row[1][1]/k_value)
             
-                num_runs = len(compare_list[this_method])
-                if num_runs != 30:
-                    print("WARN: " + this_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
-                # num_runs = len(compare_list[other_method])
-                # if num_runs != 30:
-                #     print("WARN: " + other_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
+    #             num_runs = len(compare_list[this_method])
+    #             if num_runs != 30:
+    #                 print("WARN: " + this_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
+    #             # num_runs = len(compare_list[other_method])
+    #             # if num_runs != 30:
+    #             #     print("WARN: " + other_method + ' ' + instance + ' ' + str(k_value) + ' runs size is: ' + num_runs)
                 
-                # percentage improvement
-                # if negative single has a lower objective value, if positive single has a larger objective value
-                avg1 = numpy.min(compare_list[this_method])
-                avg2 = numpy.average(compare_list[other_method])
-                percentage_improvement = round(100*(avg2-avg1)/avg1,2)
-                row_data.append(percentage_improvement)
-                col_data[k_value].append(percentage_improvement)
-                f.write(str(percentage_improvement) + '\% & ')
+    #             # percentage improvement
+    #             # if negative single has a lower objective value, if positive single has a larger objective value
+    #             avg1 = numpy.min(compare_list[this_method])
+    #             avg2 = numpy.average(compare_list[other_method])
+    #             percentage_improvement = round(100*(avg2-avg1)/avg1,2)
+    #             row_data.append(percentage_improvement)
+    #             col_data[k_value].append(percentage_improvement)
+    #             f.write(str(percentage_improvement) + '\% & ')
 
-                # t_statistic, p_value = mannwhitneyu(compare_list[this_method], compare_list[other_method])
-                temp = [avg2] * 30
-                t_statistic, p_value = ranksums(compare_list[this_method], [avg2])
+    #             # t_statistic, p_value = mannwhitneyu(compare_list[this_method], compare_list[other_method])
+    #             temp = [avg2] * 30
+    #             t_statistic, p_value = ranksums(compare_list[this_method], [avg2])
 
-                col_data[str(k_value) + "stat"].append(p_value)
+    #             col_data[str(k_value) + "stat"].append(p_value)
 
-                # out = False
-                # if  < 0.05:
-                #     out = True
-                f.write(str(format(p_value, ".2e")) +' & ')
+    #             # out = False
+    #             # if  < 0.05:
+    #             #     out = True
+    #             f.write(str(format(p_value, ".2e")) +' & ')
 
-            avg = round(numpy.average(row_data),2)
-            col_data['avg'].append(avg)
-            f.write(str(avg) +'\% \n')
-            row_data = []
+    #         avg = round(numpy.average(row_data),2)
+    #         col_data['avg'].append(avg)
+    #         f.write(str(avg) +'\% \n')
+    #         row_data = []
 
-        for key in col_data.keys():
-            if isinstance(key, str):
-                if key == 'avg':
-                    f.write('{\\bf ' + str(round(numpy.average(col_data[key]),2)) +'\%}')
-                else:
-                    f.write('{\\bf ' +format(numpy.average(col_data[key]),".3")+'} & ')
-            else:
-                f.write('{\\bf ' +str(round(numpy.average(col_data[key]),2)) +'\%} & ')
-        f.write('\n')
-    print(0)
+    #     for key in col_data.keys():
+    #         if isinstance(key, str):
+    #             if key == 'avg':
+    #                 f.write('{\\bf ' + str(round(numpy.average(col_data[key]),2)) +'\%}')
+    #             else:
+    #                 f.write('{\\bf ' +format(numpy.average(col_data[key]),".3")+'} & ')
+    #         else:
+    #             f.write('{\\bf ' +str(round(numpy.average(col_data[key]),2)) +'\%} & ')
+    #     f.write('\n')
+    # print(0)
 
 
 
